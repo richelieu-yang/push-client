@@ -1,0 +1,5 @@
+{
+  "allowed_origins": ["http://localhost:3000"],
+  "token_hmac_secret_key": "<YOUR-SECRET-STRING-HERE>",
+  "api_key": "<YOUR-API-KEY-HERE>"
+}
