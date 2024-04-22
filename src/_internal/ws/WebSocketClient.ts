@@ -1,5 +1,5 @@
 import _ from "lodash";
-import {Console} from "@/_internal/Console";
+import {Console} from "@/_internal/utils/Console";
 import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
 import {MsgHandler0} from "@/_internal/ws/MsgHandler0";
 import {MsgHandler1} from "@/_internal/ws/MsgHandler1";

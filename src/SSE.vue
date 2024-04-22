@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref, watch} from 'vue';
 import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
-import {Console} from "@/_internal/Console";
+import {Console} from "@/_internal/utils/Console";
 import {Key} from "@/_internal/consts/key";
 import {SseClient} from "@/_internal/sse/SseClient";
 

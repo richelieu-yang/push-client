@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref, watch} from 'vue';
-import {Console} from "@/_internal/Console";
+import {Console} from "@/_internal/utils/Console";
 import WebSocket from "@/WebSocket.vue";
 import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
 import SSE from "@/SSE.vue";

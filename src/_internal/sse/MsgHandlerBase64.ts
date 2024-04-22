@@ -1,4 +1,4 @@
-import {Console} from "@/_internal/Console";
+import {Console} from "@/_internal/utils/Console";
 import {Base64Kit} from "@/_chimera/crypto/Base64Kit";
 
 export class MsgHandlerBase64 {

@@ -1,4 +1,4 @@
-import {Console} from "@/_internal/Console";
+import {Console} from "@/_internal/utils/Console";
 import {BrotliKit} from "@/_chimera/compress/BrotliKit";
 
 /*

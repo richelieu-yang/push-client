@@ -1,6 +1,6 @@
 import _ from "lodash";
 import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
-import {Console} from "@/_internal/Console";
+import {Console} from "@/_internal/utils/Console";
 import {MsgHandlerRaw} from "@/_internal/sse/MsgHandlerRaw";
 import {MsgHandlerBase64} from "@/_internal/sse/MsgHandlerBase64";
 

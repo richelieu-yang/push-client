@@ -1,4 +1,4 @@
-import {Console} from "@/_internal/Console";
+import {Console} from "@/_internal/utils/Console";
 import {GzipKit} from "@/_chimera/compress/GzipKit";
 import {ArrayBufferKit} from "@/_chimera/type/ArrayBufferKit";
 import {BlobKit} from "@/_chimera/type/BlobKit";

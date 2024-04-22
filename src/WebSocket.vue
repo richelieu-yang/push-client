@@ -2,7 +2,7 @@
 import {WebSocketClient} from "@/_internal/ws/WebSocketClient";
 import {onMounted, ref, watch} from 'vue';
 import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
-import {Console} from "@/_internal/Console";
+import {Console} from "@/_internal/utils/Console";
 import {Key} from "@/_internal/consts/key";
 
 let initialUrl = SessionStorageUtil.getWsUrl(),
