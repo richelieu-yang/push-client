@@ -29,6 +29,7 @@ coverage
 
 *.tsbuildinfo
 
+/.vscode
 /.idea
 /dist
 /node_modules
