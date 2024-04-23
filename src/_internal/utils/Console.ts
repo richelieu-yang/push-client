@@ -9,6 +9,7 @@ export class Console {
 
     static println(text: string) {
         let str: string = `${this.getTimeString()} ${text}\n`;
+
         this.outputTextarea.value += str;
         console.log(str);
     }
