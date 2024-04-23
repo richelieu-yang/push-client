@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <h1>TODO: Centrifugo</h1>
+  <h1>TODO: Centrifuge</h1>
 </template>
 
 <style scoped>

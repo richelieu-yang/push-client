@@ -4,7 +4,7 @@ import {Console} from "@/_internal/utils/Console";
 import WebSocket from "@/WebSocket.vue";
 import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
 import SSE from "@/SSE.vue";
-import Centrifugo from "@/Centrifugo.vue";
+import Centrifuge from "@/Centrifuge.vue";
 import {Key} from "@/_internal/consts/key";
 
 /* Console */
@@ -28,7 +28,7 @@ watch(connectionType, (newVal, oldVal) => {
     <select v-model="connectionType">
       <option value="0">WebSocket</option>
       <option value="1">SSE</option>
-      <option value="2">Centrifugo</option>
+      <option value="2">Centrifuge</option>
     </select>
   </div>
   <div>
@@ -43,7 +43,7 @@ watch(connectionType, (newVal, oldVal) => {
   <div>
     <WebSocket v-if="connectionType==0"/>
     <SSE v-else-if="connectionType==1"/>
-    <Centrifugo v-else-if="connectionType==2" />
+    <Centrifuge v-else-if="connectionType==2" />
     <h1 v-else>
       invalid connection type: {{connectionType}}
     </h1>
