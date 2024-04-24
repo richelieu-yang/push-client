@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {ref, watch} from 'vue';
 import {Console} from "@/_internal/utils/Console";
-import WebSocket from "@/WebSocket.vue";
+import WebSocket from "@/components/WebSocket.vue";
 import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
-import SSE from "@/SSE.vue";
-import Centrifuge from "@/Centrifuge.vue";
+import SSE from "@/components/SSE.vue";
+import Centrifuge from "@/components/Centrifuge.vue";
 import {Key} from "@/_internal/consts/key";
 
 /* Console */
