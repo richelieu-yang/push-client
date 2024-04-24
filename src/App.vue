@@ -43,9 +43,9 @@ watch(connectionType, (newVal, oldVal) => {
   <div>
     <WebSocket v-if="connectionType==0"/>
     <SSE v-else-if="connectionType==1"/>
-    <Centrifuge v-else-if="connectionType==2" />
+    <Centrifuge v-else-if="connectionType==2"/>
     <h1 v-else>
-      invalid connection type: {{connectionType}}
+      invalid connection type: {{ connectionType }}
     </h1>
   </div>
 </template>

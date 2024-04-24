@@ -1,25 +1,18 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 
-let credentialFlag = ref("0"),
+let credentialFlag = ref("secret"),
     token = ref(""),
     secret = ref(""),
     fallback = ref("false");
 
-// let initialUrl = SessionStorageUtil.getSseUrl();
-// let url = ref(initialUrl);
+function connect(event: Event) {
 
-// onMounted(() => {
-//   Console.println(`[SSE] initial url: ${initialUrl}`);
-// });
+}
 
-// function connect(event: Event) {
-//   CentrifugeClient.connect(url.value);
-// }
-//
-// function disconnect(event: Event) {
-//   CentrifugeClient.disconnect();
-// }
+function disconnect(event: Event) {
+
+}
 </script>
 
 <template>
