@@ -1,43 +1,85 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
-import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
-import {Console} from "@/_internal/utils/Console";
-import {CentrifugeClient} from "@/_internal/centrifuge/CentrifugeClient";
+import {ref} from 'vue';
 
-let initialUrl = SessionStorageUtil.getSseUrl();
-let url = ref(initialUrl);
+let credentialFlag = ref("0"),
+    token = ref(""),
+    secret = ref(""),
+    fallback = ref("false");
 
-onMounted(() => {
-  Console.println(`[SSE] initial url: ${initialUrl}`);
-});
+// let initialUrl = SessionStorageUtil.getSseUrl();
+// let url = ref(initialUrl);
 
-function connect(event: Event) {
-  CentrifugeClient.connect(url.value);
-}
+// onMounted(() => {
+//   Console.println(`[SSE] initial url: ${initialUrl}`);
+// });
 
-function disconnect(event: Event) {
-  CentrifugeClient.disconnect();
-}
+// function connect(event: Event) {
+//   CentrifugeClient.connect(url.value);
+// }
+//
+// function disconnect(event: Event) {
+//   CentrifugeClient.disconnect();
+// }
 </script>
 
 <template>
   <div>
-    client credentials
-    <select class="margin-left">
-      <option value="1">token</option>
-      <option value="2">secret</option>
+    client credentials:
+    <select v-model="credentialFlag" class="margin-left">
+      <option value="secret">secret</option>
+      <option value="token">token</option>
     </select>
-    <input class="margin-left" type="text">
+    <input v-if="credentialFlag=='secret'" v-model="secret" class="margin-left" style="width: 600px" type="text">
+    <input v-else-if="credentialFlag=='token'" v-model="token" class="margin-left" style="width: 600px" type="text">
   </div>
+  <div>
+    <select disabled style="width: 100px">
+      <option value="websocket">websocket</option>
+    </select>
+    <input class="margin-left" placeholder="以 ws:// 或 wss:// 开头..." style="width: 600px" type="text">
+  </div>
+  <br>
 
   <div>
-    Centrifuge url:
-    <br>
-    <input v-model="url" type="text" style="width: 1200px" placeholder="以 http:// 或 https:// 开头...">
-    <br>
+    fallback
+    <select v-model="fallback" class="margin-left">
+      <option value="false">false</option>
+      <option value="true">true</option>
+    </select>
+    <div v-if="fallback=='true'">
+      <div>
+        <select style="width: 100px">
+          <option value="">null</option>
+          <option value="http_stream">http_stream</option>
+          <option value="sse">sse</option>
+        </select>
+        <input class="margin-left" style="width: 600px" type="text">
+      </div>
+      <div>
+        <select style="width: 100px">
+          <option value="">null</option>
+          <option value="http_stream">http_stream</option>
+          <option value="sse">sse</option>
+        </select>
+        <input class="margin-left" style="width: 600px" type="text">
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <div>
     <button @click="connect($event)">Connect</button>
     <button class="margin-left" @click="disconnect($event)">Disconnect</button>
   </div>
+
+  <!--  <div>-->
+  <!--    Centrifuge url:-->
+  <!--    <br>-->
+  <!--    <input v-model="url" type="text" style="width: 1200px">-->
+  <!--    <br>-->
+  <!--    <button @click="connect($event)">Connect</button>-->
+  <!--    <button class="margin-left" @click="disconnect($event)">Disconnect</button>-->
+  <!--  </div>-->
 </template>
 
 <style scoped>
