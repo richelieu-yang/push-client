@@ -1,5 +1,6 @@
 import _ from "lodash";
 import {Centrifuge} from 'centrifuge';
+import {Console} from "@/_internal/utils/Console";
 
 export class CentrifugeClient {
     private static client: Centrifuge | null = null;
@@ -7,11 +8,42 @@ export class CentrifugeClient {
     static connect(url: string) {
         this.disconnect();
 
-        let errorText = this.checkUrl(url);
-        if (!_.isEmpty(errorText)) {
-            alert(errorText);
-            return;
-        }
+        // let errorText = this.checkUrl(url);
+        // if (!_.isEmpty(errorText)) {
+        //     alert(errorText);
+        //     return;
+        // }
+
+        const transports: any = [
+            {
+                transport: 'websocket',
+                endpoint: 'ws://127.0.0.1:8000/connection/websocket'
+            },
+            // {
+            //     transport: 'http_stream',
+            //     endpoint: 'http://example.com/connection/http_stream'
+            // },
+            // {
+            //     transport: 'sse',
+            //     endpoint: 'http://example.com/connection/sse'
+            // }
+        ];
+        this.client = new Centrifuge(transports);
+        // this.client.setToken("<token>");
+        this.client.on('connected', function (ctx) {
+            Console.println("connected");
+        });
+        this.client.on('connecting', function (ctx) {
+            Console.println("connecting");
+        });
+        this.client.on('disconnected', function (ctx) {
+            Console.println("disconnected");
+        });
+        this.client.connect();
+    }
+
+    static send() {
+        // TODO: https://github.com/centrifugal/centrifuge-js?tab=readme-ov-file#send-method
 
     }
 
@@ -20,7 +52,8 @@ export class CentrifugeClient {
             return;
         }
 
-        // TODO: 关闭连接
+        this.client.disconnect();
+        this.client = null;
     }
 
     private static checkUrl(url: string): string {
