@@ -36,7 +36,7 @@ function disconnect(event: Event) {
     <input v-model="url" type="text" style="width: 1200px" placeholder="以 http:// 或 https:// 开头...">
     <br>
     <button @click="connect($event)">Connect</button>
-    <button @click="disconnect($event)" style="margin-left: 10px">Disconnect</button>
+    <button class="margin-left" @click="disconnect($event)">Disconnect</button>
   </div>
 </template>
 
