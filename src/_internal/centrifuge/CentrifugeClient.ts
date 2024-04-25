@@ -16,6 +16,9 @@ export class CentrifugeClient {
         };
         this.client = new Centrifuge(endpoints, opts);
         // this.client.setToken("<token>");
+        this.client.on('connecting', function (ctx) {
+            Console.println("connecting");
+        });
         this.client.on('connected', function (ctx) {
             Console.println("connected");
         });
