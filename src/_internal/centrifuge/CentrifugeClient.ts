@@ -14,7 +14,8 @@ export class CentrifugeClient {
         //     return;
         // }
 
-        const transports: any = [
+        const transports: []
+        TransportEndpoint = [
             {
                 transport: 'websocket',
                 endpoint: 'ws://127.0.0.1:8000/connection/websocket'
