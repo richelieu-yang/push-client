@@ -1,8 +1,8 @@
-import _ from "lodash";
 import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
 import {Console} from "@/_internal/utils/Console";
 import {MsgHandlerRaw} from "@/_internal/sse/MsgHandlerRaw";
 import {MsgHandlerBase64} from "@/_internal/sse/MsgHandlerBase64";
+import {SseKit} from "@/_chimera/longConnection/SseKit";
 
 export class SseClient {
     private static client: EventSource | null = null;
@@ -10,9 +10,8 @@ export class SseClient {
     static connect(url: string, pushType: number) {
         this.disconnect();
 
-        let errorText = this.checkUrl(url);
-        if (!_.isEmpty(errorText)) {
-            alert(errorText);
+        if (!SseKit.checkUrl(url)) {
+            alert(`SSE url(${url}) is invalid!`);
             return;
         }
         SessionStorageUtil.setSseUrl(url);
@@ -38,17 +37,6 @@ export class SseClient {
 
         this.client.close();
         this.client = null;
-    }
-
-    private static checkUrl(url: string): string {
-        if (_.isEmpty(url)) {
-            return "url is empty";
-        }
-        if (!_.startsWith(url, "http://") && !_.startsWith(url, "https://")) {
-            return "prefix of url is invalid"
-        }
-
-        return "";
     }
 
     private static handle(pushType: number, origin: string, id: string, event: string, data: any) {

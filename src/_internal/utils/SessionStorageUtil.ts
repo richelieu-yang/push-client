@@ -67,4 +67,88 @@ export class SessionStorageUtil {
         return Number(SessionStorageKit.get(Key.SsePushMessageType));
     }
 
+    /*
+     * Centrifuge CredentialFlag
+     */
+    static getCentrifugeCredentialFlag(): string {
+        return ""
+    }
+
+    /*
+     * Centrifuge CredentialFlag
+     */
+    static setCentrifugeCredentialFlag(value: string) {
+
+    }
+
+    /*
+     * Centrifuge Secret
+     */
+    static getCentrifugeSecret(): string {
+        return ""
+    }
+
+    /*
+     * Centrifuge Secret
+     */
+    static setCentrifugeSecret(value: string) {
+
+    }
+
+    /*
+     * Centrifuge Token
+     */
+    static getCentrifugeToken(): string {
+        return ""
+    }
+
+    /*
+     * Centrifuge Token
+     */
+    static setCentrifugeToken(value: string) {
+
+    }
+
+    /*
+     * Centrifuge WsUrl
+     */
+    static getCentrifugeWsUrl(): string {
+        return ""
+    }
+
+    /*
+     * Centrifuge Fallback
+     */
+    static setCentrifugeWsUrl(value: string) {
+
+    }
+
+    /*
+     * Centrifuge Fallback
+     */
+    static getCentrifugeFallback(): string {
+        return ""
+    }
+
+    /*
+     * Centrifuge
+     */
+    static setCentrifugeFallback(value: string) {
+
+    }
+
+    /*
+     * Centrifuge
+     */
+    static getCentrifuge(): string {
+        return ""
+    }
+
+    /*
+     * Centrifuge
+     */
+    static setCentrifuge(value: string) {
+
+    }
+
 }

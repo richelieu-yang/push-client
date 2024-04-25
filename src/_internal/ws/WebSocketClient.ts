@@ -3,6 +3,7 @@ import {Console} from "@/_internal/utils/Console";
 import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
 import {MsgHandler0} from "@/_internal/ws/MsgHandler0";
 import {MsgHandler1} from "@/_internal/ws/MsgHandler1";
+import {WebSocketKit} from "@/_chimera/longConnection/WebSocketKit";
 
 export class WebSocketClient {
     private static client: WebSocket | null = null;
@@ -10,9 +11,8 @@ export class WebSocketClient {
     static connect(url: string, pushType: number) {
         this.disconnect();
 
-        let errorText = this.checkUrl(url);
-        if (!_.isEmpty(errorText)) {
-            alert(errorText);
+        if (!WebSocketKit.checkUrl(url)) {
+            alert(`WebSocket url(${url}) is invalid!`);
             return;
         }
         SessionStorageUtil.setWsUrl(url);
@@ -70,14 +70,4 @@ export class WebSocketClient {
         this.client = null;
     }
 
-    private static checkUrl(url: string): string {
-        if (_.isEmpty(url)) {
-            return "url is empty";
-        }
-        if (!_.startsWith(url, "ws://") && !_.startsWith(url, "wss://")) {
-            return "prefix of url is invalid"
-        }
-
-        return "";
-    }
 }

@@ -3,8 +3,11 @@ import {ref} from 'vue';
 
 let credentialFlag = ref("secret"),
     token = ref(""),
-    secret = ref(""),
-    fallback = ref("false");
+    secret = ref("");
+
+let wsUrl = ref("");
+
+let fallback = ref("false");
 
 function connect(event: Event) {
 
@@ -19,7 +22,7 @@ function disconnect(event: Event) {
   <div>
     client credentials:
     <select v-model="credentialFlag" class="margin-left">
-      <option value="secret">secret</option>
+      <option value="secret">secret or token_hmac_secret_key</option>
       <option value="token">token</option>
     </select>
     <input v-if="credentialFlag=='secret'" v-model="secret" class="margin-left" style="width: 600px" type="text">
@@ -29,7 +32,8 @@ function disconnect(event: Event) {
     <select disabled style="width: 100px">
       <option value="websocket">websocket</option>
     </select>
-    <input class="margin-left" placeholder="以 ws:// 或 wss:// 开头..." style="width: 600px" type="text">
+    <input v-model="wsUrl" class="margin-left" placeholder="以 ws:// 或 wss:// 开头..." style="width: 600px"
+           type="text">
   </div>
   <br>
 
