@@ -2,7 +2,7 @@
 import {ref, watch} from 'vue';
 import {Console} from "@/_internal/utils/Console";
 import WebSocket from "@/components/WebSocket.vue";
-import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
+import {LocalStorageUtil} from "@/_internal/utils/LocalStorageUtil";
 import SSE from "@/components/SSE.vue";
 import Centrifuge from "@/components/Centrifuge.vue";
 import {Key} from "@/_internal/consts/key";
@@ -15,10 +15,10 @@ function clear(event: Event) {
   Console.clear();
 }
 
-let connectionType = ref(SessionStorageUtil.getConnectionType());
+let connectionType = ref(LocalStorageUtil.getConnectionType());
 watch(connectionType, (newVal, oldVal) => {
   Console.println(`${Key.ConnectionType} is changed: ${oldVal} -> ${newVal}`);
-  SessionStorageUtil.setConnectionType(newVal);
+  LocalStorageUtil.setConnectionType(newVal);
 });
 </script>
 

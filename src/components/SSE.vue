@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import {onMounted, ref, watch} from 'vue';
-import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
+import {LocalStorageUtil} from "@/_internal/utils/LocalStorageUtil";
 import {Console} from "@/_internal/utils/Console";
 import {Key} from "@/_internal/consts/key";
 import {SseClient} from "@/_internal/sse/SseClient";
 
-let initialUrl = SessionStorageUtil.getSseUrl(),
-    initialPushMessageType = SessionStorageUtil.getSsePushMessageType();
+let initialUrl = LocalStorageUtil.getSseUrl(),
+    initialPushMessageType = LocalStorageUtil.getSsePushMessageType();
 
 let url = ref(initialUrl),
     pushMessageType = ref(initialPushMessageType);
 
 watch(pushMessageType, (newVal, oldVal) => {
   Console.println(`${Key.SsePushMessageType} is changed: ${oldVal} -> ${newVal}`);
-  SessionStorageUtil.setSsePushMessageType(newVal);
+  LocalStorageUtil.setSsePushMessageType(newVal);
 });
 
 onMounted(() => {

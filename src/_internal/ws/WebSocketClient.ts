@@ -1,6 +1,6 @@
 import _ from "lodash";
 import {Console} from "@/_internal/utils/Console";
-import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
+import {LocalStorageUtil} from "@/_internal/utils/LocalStorageUtil";
 import {MsgHandler0} from "@/_internal/ws/MsgHandler0";
 import {MsgHandler1} from "@/_internal/ws/MsgHandler1";
 import {WebSocketKit} from "@/_chimera/longConnection/WebSocketKit";
@@ -15,7 +15,7 @@ export class WebSocketClient {
             alert(`WebSocket url(${url}) is invalid!`);
             return;
         }
-        SessionStorageUtil.setWsUrl(url);
+        LocalStorageUtil.setWsUrl(url);
 
         this.client = new WebSocket(url);
         this.client.binaryType = "blob"; // "arraybuffer" 或者 "blob"

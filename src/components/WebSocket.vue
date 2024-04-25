@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {WebSocketClient} from "@/_internal/ws/WebSocketClient";
 import {onMounted, ref, watch} from 'vue';
-import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
+import {LocalStorageUtil} from "@/_internal/utils/LocalStorageUtil";
 import {Console} from "@/_internal/utils/Console";
 import {Key} from "@/_internal/consts/key";
 
-let initialUrl = SessionStorageUtil.getWsUrl(),
-    initialPushMessageType = SessionStorageUtil.getWsPushMessageType();
+let initialUrl = LocalStorageUtil.getWsUrl(),
+    initialPushMessageType = LocalStorageUtil.getWsPushMessageType();
 
 let url = ref(initialUrl),
     pushMessageType = ref(initialPushMessageType),
@@ -14,7 +14,7 @@ let url = ref(initialUrl),
 
 watch(pushMessageType, (newVal, oldVal) => {
   Console.println(`${Key.WsPushMessageType} is changed: ${oldVal} -> ${newVal}`);
-  SessionStorageUtil.setWsPushMessageType(newVal);
+  LocalStorageUtil.setWsPushMessageType(newVal);
 });
 
 onMounted(() => {

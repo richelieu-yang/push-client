@@ -1,4 +1,4 @@
-export class SessionStorageKit {
+export class LocalStorageKit {
     static set(key:string, value:string){
         localStorage[key] = value;
     }

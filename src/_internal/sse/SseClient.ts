@@ -1,4 +1,4 @@
-import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
+import {LocalStorageUtil} from "@/_internal/utils/LocalStorageUtil";
 import {Console} from "@/_internal/utils/Console";
 import {MsgHandlerRaw} from "@/_internal/sse/MsgHandlerRaw";
 import {MsgHandlerBase64} from "@/_internal/sse/MsgHandlerBase64";
@@ -14,7 +14,7 @@ export class SseClient {
             alert(`SSE url(${url}) is invalid!`);
             return;
         }
-        SessionStorageUtil.setSseUrl(url);
+        LocalStorageUtil.setSseUrl(url);
 
         this.client = new EventSource(url);
         this.client.addEventListener('test', function (e) {

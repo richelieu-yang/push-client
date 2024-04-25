@@ -1,182 +1,182 @@
-import {SessionStorageKit} from "@/_chimera/browser/SessionStorageKit";
+import {LocalStorageKit} from "@/_chimera/browser/LocalStorageKit";
 import {Key} from "@/_internal/consts/key";
 
-export class SessionStorageUtil {
+export class LocalStorageUtil {
     static setConnectionType(value: number) {
-        SessionStorageKit.set(Key.ConnectionType, value.toString());
+        LocalStorageKit.set(Key.ConnectionType, value.toString());
     }
 
     // 默认返回0
     static getConnectionType(): number {
-        return Number(SessionStorageKit.get(Key.ConnectionType));
+        return Number(LocalStorageKit.get(Key.ConnectionType));
     }
 
     /*
      * WebSocket
      */
     static setWsUrl(value: string) {
-        SessionStorageKit.set(Key.WsUrl, value);
+        LocalStorageKit.set(Key.WsUrl, value);
     }
 
     /*
      * WebSocket
      */
     static getWsUrl(): string {
-        return SessionStorageKit.get(Key.WsUrl);
+        return LocalStorageKit.get(Key.WsUrl);
     }
 
     /*
      * WebSocket
      */
     static setWsPushMessageType(value: number) {
-        SessionStorageKit.set(Key.WsPushMessageType, value.toString());
+        LocalStorageKit.set(Key.WsPushMessageType, value.toString());
     }
 
     /*
      * WebSocket 默认返回0
      */
     static getWsPushMessageType(): number {
-        return Number(SessionStorageKit.get(Key.WsPushMessageType));
+        return Number(LocalStorageKit.get(Key.WsPushMessageType));
     }
 
     /*
      * SSE
      */
     static setSseUrl(value: string) {
-        SessionStorageKit.set(Key.SseUrl, value);
+        LocalStorageKit.set(Key.SseUrl, value);
     }
 
     /*
      * SSE
      */
     static getSseUrl(): string {
-        return SessionStorageKit.get(Key.SseUrl);
+        return LocalStorageKit.get(Key.SseUrl);
     }
 
     /*
     * SSE
     */
     static setSsePushMessageType(value: number) {
-        SessionStorageKit.set(Key.SsePushMessageType, value.toString());
+        LocalStorageKit.set(Key.SsePushMessageType, value.toString());
     }
 
     /*
      * SSE 默认返回0
      */
     static getSsePushMessageType(): number {
-        return Number(SessionStorageKit.get(Key.SsePushMessageType));
+        return Number(LocalStorageKit.get(Key.SsePushMessageType));
     }
 
     /*
-     * Centrifuge-CredentialFlag
+     * Centrifuge-CredentialType
      */
-    static getCentrifugeCredentialFlag(): string {
-        return SessionStorageKit.get("Centrifuge-CredentialFlag") || "secret";
+    static getCentrifugeCredentialType(): string {
+        return LocalStorageKit.get("Centrifuge-CredentialType") || "secret";
     }
 
     /*
-     * Centrifuge-CredentialFlag
+     * Centrifuge-CredentialType
      */
-    static setCentrifugeCredentialFlag(value: string) {
-        SessionStorageKit.set("Centrifuge-CredentialFlag", value);
+    static setCentrifugeCredentialType(value: string) {
+        LocalStorageKit.set("Centrifuge-CredentialType", value);
     }
 
     /*
      * Centrifuge-Secret
      */
     static getCentrifugeSecret(): string {
-        return SessionStorageKit.get("Centrifuge-Secret") || "";
+        return LocalStorageKit.get("Centrifuge-Secret") || "";
     }
 
     /*
      * Centrifuge-Secret
      */
     static setCentrifugeSecret(value: string) {
-        SessionStorageKit.set("Centrifuge-Secret", value);
+        LocalStorageKit.set("Centrifuge-Secret", value);
     }
 
     /*
      * Centrifuge-Token
      */
     static getCentrifugeToken(): string {
-        return SessionStorageKit.get("Centrifuge-Token") || "";
+        return LocalStorageKit.get("Centrifuge-Token") || "";
     }
 
     /*
      * Centrifuge-Token
      */
     static setCentrifugeToken(value: string) {
-        SessionStorageKit.set("Centrifuge-Token", value);
+        LocalStorageKit.set("Centrifuge-Token", value);
     }
 
     /*
      * Centrifuge-WsUrl
      */
     static getCentrifugeWsUrl(): string {
-        return SessionStorageKit.get("Centrifuge-WsUrl") || "";
+        return LocalStorageKit.get("Centrifuge-WsUrl") || "";
     }
 
     /*
      * Centrifuge-WsUrl
      */
     static setCentrifugeWsUrl(value: string) {
-        SessionStorageKit.set("Centrifuge-WsUrl", value);
+        LocalStorageKit.set("Centrifuge-WsUrl", value);
     }
 
     /*
      * Centrifuge-Alternative0-Type
      */
     static getCentrifugeAlternative0Type(): string {
-        return SessionStorageKit.get("Centrifuge-Alternative0-Type") || "";
+        return LocalStorageKit.get("Centrifuge-Alternative0-Type") || "";
     }
 
     /*
      * Centrifuge-Alternative0-Type
      */
     static setCentrifugeAlternative0Type(value: string) {
-        SessionStorageKit.set("Centrifuge-Alternative0-Type", value);
+        LocalStorageKit.set("Centrifuge-Alternative0-Type", value);
     }
 
     /*
      * Centrifuge-Alternative0-Url
      */
     static getCentrifugeAlternative0Url(): string {
-        return SessionStorageKit.get("Centrifuge-Alternative0-Url") || "";
+        return LocalStorageKit.get("Centrifuge-Alternative0-Url") || "";
     }
 
     /*
      * Centrifuge-Alternative0-Url
      */
     static setCentrifugeAlternative0Url(value: string) {
-        SessionStorageKit.set("Centrifuge-Alternative0-Url", value);
+        LocalStorageKit.set("Centrifuge-Alternative0-Url", value);
     }
 
     /*
      * Centrifuge-Alternative1-Type
      */
     static getCentrifugeAlternative1Type(): string {
-        return SessionStorageKit.get("Centrifuge-Alternative1-Type") || "";
+        return LocalStorageKit.get("Centrifuge-Alternative1-Type") || "";
     }
 
     /*
      * Centrifuge-Alternative1-Type
      */
     static setCentrifugeAlternative1Type(value: string) {
-        SessionStorageKit.set("Centrifuge-Alternative1-Type", value);
+        LocalStorageKit.set("Centrifuge-Alternative1-Type", value);
     }
 
     /*
      * Centrifuge-Alternative1-Url
      */
     static getCentrifugeAlternative1Url(): string {
-        return SessionStorageKit.get("Centrifuge-Alternative1-Url") || "";
+        return LocalStorageKit.get("Centrifuge-Alternative1-Url") || "";
     }
 
     /*
      * Centrifuge-Alternative1-Url
      */
     static setCentrifugeAlternative1Url(value: string) {
-        SessionStorageKit.set("Centrifuge-Alternative1-Url", value);
+        LocalStorageKit.set("Centrifuge-Alternative1-Url", value);
     }
 
     // /*
