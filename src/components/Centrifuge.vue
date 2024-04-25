@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import {ref} from 'vue';
+import {SessionStorageUtil} from "@/_internal/utils/SessionStorageUtil";
 
-let credentialFlag = ref("secret"),
-    token = ref(""),
-    secret = ref("");
+let credentialFlag = ref(SessionStorageUtil.getCentrifugeCredentialFlag()),
+    token = ref(SessionStorageUtil.getCentrifugeToken()),
+    secret = ref(SessionStorageUtil.getCentrifugeSecret());
 
-let wsUrl = ref("");
+let wsUrl = ref(SessionStorageUtil.getCentrifugeWsUrl());
 
-let fallback = ref("false");
+let alternative0Type = ref(SessionStorageUtil.getCentrifugeAlternative0Type()),
+    alternative0Url = ref(SessionStorageUtil.getCentrifugeAlternative0Url()),
+    alternative1Type = ref(SessionStorageUtil.getCentrifugeAlternative1Type()),
+    alternative1Url = ref(SessionStorageUtil.getCentrifugeAlternative1Url());
 
 function connect(event: Event) {
 
@@ -28,6 +32,9 @@ function disconnect(event: Event) {
     <input v-if="credentialFlag=='secret'" v-model="secret" class="margin-left" style="width: 600px" type="text">
     <input v-else-if="credentialFlag=='token'" v-model="token" class="margin-left" style="width: 600px" type="text">
   </div>
+  <br>
+
+  <!-- 必选项（websocket） -->
   <div>
     <select disabled style="width: 100px">
       <option value="websocket">websocket</option>
@@ -35,32 +42,25 @@ function disconnect(event: Event) {
     <input v-model="wsUrl" class="margin-left" placeholder="以 ws:// 或 wss:// 开头..." style="width: 600px"
            type="text">
   </div>
-  <br>
-
+  <!-- 可选项1 -->
   <div>
-    fallback
-    <select v-model="fallback" class="margin-left">
-      <option value="false">false</option>
-      <option value="true">true</option>
+    <select v-model="alternative0Type" style="width: 100px">
+      <option value="">null</option>
+      <option value="http_stream">http_stream</option>
+      <option value="sse">sse</option>
+      <option value="sockjs">sse</option>
     </select>
-    <div v-if="fallback=='true'">
-      <div>
-        <select style="width: 100px">
-          <option value="">null</option>
-          <option value="http_stream">http_stream</option>
-          <option value="sse">sse</option>
-        </select>
-        <input class="margin-left" style="width: 600px" type="text">
-      </div>
-      <div>
-        <select style="width: 100px">
-          <option value="">null</option>
-          <option value="http_stream">http_stream</option>
-          <option value="sse">sse</option>
-        </select>
-        <input class="margin-left" style="width: 600px" type="text">
-      </div>
-    </div>
+    <input v-model="alternative0Url" class="margin-left" style="width: 600px" type="text">
+  </div>
+  <!-- 可选项1 -->
+  <div>
+    <select v-model="alternative1Type" style="width: 100px">
+      <option value="">null</option>
+      <option value="http_stream">http_stream</option>
+      <option value="sse">sse</option>
+      <option value="sockjs">sse</option>
+    </select>
+    <input v-model="alternative1Url" class="margin-left" style="width: 600px" type="text">
   </div>
   <br>
 
