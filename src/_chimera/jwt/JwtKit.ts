@@ -11,13 +11,21 @@ export class JwtKit {
     static sign(payload: any, alg: string = "HS256", secret: string) {
         const secretUA = new TextEncoder().encode(secret)
 
-        return new jose.SignJWT({'urn:example:claim': true})
+        return new jose.SignJWT(payload)
             .setProtectedHeader({alg})
             .setIssuedAt()
-            .setIssuer('urn:example:issuer')
-            .setAudience('urn:example:audience')
-            .setExpirationTime('2h')
+            // .setIssuer('urn:example:issuer')
+            // .setAudience('urn:example:audience')
+            // .setExpirationTime('2h')
             .sign(secretUA);
+
+        //     return new jose.SignJWT({'urn:example:claim': true})
+        //         .setProtectedHeader({alg})
+        //         .setIssuedAt()
+        //         .setIssuer('urn:example:issuer')
+        //         .setAudience('urn:example:audience')
+        //         .setExpirationTime('2h')
+        //         .sign(secretUA);
     }
 
 }
