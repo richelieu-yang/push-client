@@ -1,4 +1,5 @@
 import _ from "lodash";
+import type {TransportEndpoint} from "centrifuge";
 import {Centrifuge} from 'centrifuge';
 import {Console} from "@/_internal/utils/Console";
 
@@ -14,8 +15,7 @@ export class CentrifugeClient {
         //     return;
         // }
 
-        const transports: []
-        TransportEndpoint = [
+        const transports: TransportEndpoint[] = [
             {
                 transport: 'websocket',
                 endpoint: 'ws://127.0.0.1:8000/connection/websocket'
