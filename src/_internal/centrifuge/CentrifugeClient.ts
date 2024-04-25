@@ -8,7 +8,7 @@ export class CentrifugeClient {
     private static client: Centrifuge | null = null;
 
     static connect(endpoints: Array<TransportEndpoint>, token: string) {
-        this.disconnect();
+        this.disconnect(false);
 
         let opts: Partial<Options> = {
             debug: true,
@@ -33,9 +33,11 @@ export class CentrifugeClient {
 
     }
 
-    static disconnect() {
+    static disconnect(alertFlag: boolean = true) {
         if (this.client == null) {
-            alert("No connection now!");
+            if (alertFlag) {
+                alert("No connection now!");
+            }
             return;
         }
 

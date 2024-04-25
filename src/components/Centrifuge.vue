@@ -138,6 +138,8 @@ function disconnect(event: Event) {
 
   TransportEndpoints:
   <br>
+  Bidirectional WebSocket default endpoint: ws://localhost:8000/connection/websocket
+  <br>
   <!-- 可选项0 -->
   <div>
     <select v-model="alternative0Type" style="width: 140px">
