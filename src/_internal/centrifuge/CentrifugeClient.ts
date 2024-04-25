@@ -35,6 +35,7 @@ export class CentrifugeClient {
 
     static disconnect() {
         if (this.client == null) {
+            alert("No connection now!");
             return;
         }
 

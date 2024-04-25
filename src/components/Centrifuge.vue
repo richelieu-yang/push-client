@@ -4,19 +4,18 @@ import {ref, watch} from 'vue';
 import {LocalStorageUtil} from "@/_internal/utils/LocalStorageUtil";
 import type {TransportEndpoint, TransportName} from "centrifuge";
 import {CentrifugeClient} from "@/_internal/centrifuge/CentrifugeClient";
-import {WebSocketKit} from "@/_chimera/longConnection/WebSocketKit";
 import {JwtKit} from "@/_chimera/jwt/JwtKit";
 
 let credentialType = ref(LocalStorageUtil.getCentrifugeCredentialType()),
     token = ref(LocalStorageUtil.getCentrifugeToken()),
     secret = ref(LocalStorageUtil.getCentrifugeSecret());
 
-let wsUrl = ref(LocalStorageUtil.getCentrifugeWsUrl());
-
 let alternative0Type = ref(LocalStorageUtil.getCentrifugeAlternative0Type()),
     alternative0Url = ref(LocalStorageUtil.getCentrifugeAlternative0Url()),
     alternative1Type = ref(LocalStorageUtil.getCentrifugeAlternative1Type()),
-    alternative1Url = ref(LocalStorageUtil.getCentrifugeAlternative1Url());
+    alternative1Url = ref(LocalStorageUtil.getCentrifugeAlternative1Url()),
+    alternative2Type = ref(LocalStorageUtil.getCentrifugeAlternative2Type()),
+    alternative2Url = ref(LocalStorageUtil.getCentrifugeAlternative2Url());
 
 watch(credentialType, (newVal, oldVal) => {
   LocalStorageUtil.setCentrifugeCredentialType(newVal);
@@ -36,10 +35,6 @@ function secretBlur() {
   LocalStorageUtil.setCentrifugeSecret(secret.value);
 }
 
-function wsUrlBlur() {
-  LocalStorageUtil.setCentrifugeWsUrl(wsUrl.value);
-}
-
 function alternative0UrlBlur() {
   LocalStorageUtil.setCentrifugeAlternative0Url(alternative0Url.value);
 }
@@ -48,16 +43,14 @@ function alternative1UrlBlur() {
   LocalStorageUtil.setCentrifugeAlternative1Url(alternative1Url.value);
 }
 
+function alternative2UrlBlur() {
+  LocalStorageUtil.setCentrifugeAlternative2Url(alternative2Url.value);
+}
+
 async function connect(event: Event) {
   let endpoints: TransportEndpoint[] = [];
-  if (!WebSocketKit.checkUrl(wsUrl.value)) {
-    alert("");
-    return;
-  }
-  endpoints.push({
-    transport: "websocket",
-    endpoint: wsUrl.value
-  });
+
+  /* alternative 0 */
   if (!_.isEmpty(alternative0Type.value) && !_.isEmpty(alternative0Url.value)) {
     if (!CentrifugeClient.checkUrl(alternative0Url.value)) {
       alert(`invalid alternative0Url: ${alternative0Url.value}`);
@@ -68,6 +61,7 @@ async function connect(event: Event) {
       endpoint: alternative0Url.value
     });
   }
+  /* alternative 1 */
   if (!_.isEmpty(alternative1Type.value) && !_.isEmpty(alternative1Url.value)) {
     if (!CentrifugeClient.checkUrl(alternative1Url.value)) {
       alert(`invalid alternative1Url: ${alternative1Url.value}`);
@@ -77,6 +71,21 @@ async function connect(event: Event) {
       transport: alternative1Type.value as TransportName,
       endpoint: alternative1Url.value
     });
+  }
+  /* alternative 2 */
+  if (!_.isEmpty(alternative2Type.value) && !_.isEmpty(alternative2Url.value)) {
+    if (!CentrifugeClient.checkUrl(alternative2Url.value)) {
+      alert(`invalid alternative2Url: ${alternative2Url.value}`);
+      return;
+    }
+    endpoints.push({
+      transport: alternative2Type.value as TransportName,
+      endpoint: alternative2Url.value
+    });
+  }
+  if (_.isEmpty(endpoints)) {
+    alert(`You need at least one valid TransportEndpoint!`);
+    return;
   }
 
   let tokenStr: string = "";
@@ -116,7 +125,7 @@ function disconnect(event: Event) {
   <div>
     client credentials:
     <select v-model="credentialType" class="margin-left">
-      <option value="secret">secret or token_hmac_secret_key</option>
+      <option value="secret">token_hmac_secret_key</option>
       <option value="token">token</option>
     </select>
     <input v-if="credentialType=='secret'" v-model="secret" class="margin-left" style="width: 600px" type="text"
@@ -127,34 +136,40 @@ function disconnect(event: Event) {
   </div>
   <br>
 
-  <!-- 必选项（websocket） -->
-  <div>
-    <select disabled style="width: 100px">
-      <option value="websocket">websocket</option>
-    </select>
-    <input v-model="wsUrl" class="margin-left" placeholder="以 ws:// 或 wss:// 开头..." style="width: 600px"
-           @blur="wsUrlBlur"
-           type="text">
-  </div>
+  TransportEndpoints:
+  <br>
   <!-- 可选项0 -->
   <div>
-    <select v-model="alternative0Type" style="width: 100px">
+    <select v-model="alternative0Type" style="width: 140px">
       <option value="">null</option>
-      <option value="http_stream">http_stream</option>
+      <option value="websocket">websocket</option>
       <option value="sse">sse</option>
-      <option value="sockjs">sockjs</option>
+      <option value="http_stream">http_stream</option>
+      <option value="sockjs">sockjs(Deprecated)</option>
     </select>
     <input v-model="alternative0Url" class="margin-left" style="width: 600px" type="text" @blur="alternative0UrlBlur">
   </div>
   <!-- 可选项1 -->
   <div>
-    <select v-model="alternative1Type" style="width: 100px">
+    <select v-model="alternative1Type" style="width: 140px">
       <option value="">null</option>
-      <option value="http_stream">http_stream</option>
+      <option value="websocket">websocket</option>
       <option value="sse">sse</option>
-      <option value="sockjs">sockjs</option>
+      <option value="http_stream">http_stream</option>
+      <option value="sockjs">sockjs(Deprecated)</option>
     </select>
     <input v-model="alternative1Url" class="margin-left" style="width: 600px" type="text" @blur="alternative1UrlBlur">
+  </div>
+  <!-- 可选项2 -->
+  <div>
+    <select v-model="alternative2Type" style="width: 140px">
+      <option value="">null</option>
+      <option value="websocket">websocket</option>
+      <option value="sse">sse</option>
+      <option value="http_stream">http_stream</option>
+      <option value="sockjs">sockjs(Deprecated)</option>
+    </select>
+    <input v-model="alternative2Url" class="margin-left" style="width: 600px" type="text" @blur="alternative2UrlBlur">
   </div>
   <br>
 

@@ -127,7 +127,7 @@ export class LocalStorageUtil {
      * Centrifuge-Alternative0-Type
      */
     static getCentrifugeAlternative0Type(): string {
-        return LocalStorageKit.get("Centrifuge-Alternative0-Type") || "";
+        return LocalStorageKit.get("Centrifuge-Alternative0-Type") || "websocket";
     }
 
     /*
@@ -179,18 +179,32 @@ export class LocalStorageUtil {
         LocalStorageKit.set("Centrifuge-Alternative1-Url", value);
     }
 
-    // /*
-    //  * Centrifuge-
-    //  */
-    // static getCentrifuge(): string {
-    //     return SessionStorageKit.get("") || "";
-    // }
-    //
-    // /*
-    //  * Centrifuge-
-    //  */
-    // static setCentrifuge(value: string) {
-    //     SessionStorageKit.set("", value);
-    // }
+    /*
+     * Centrifuge-Alternative2-Type
+     */
+    static getCentrifugeAlternative2Type(): string {
+        return LocalStorageKit.get("Centrifuge-Alternative2-Type") || "";
+    }
+
+    /*
+     * Centrifuge-Alternative2-Type
+     */
+    static setCentrifugeAlternative2Type(value: string) {
+        LocalStorageKit.set("Centrifuge-Alternative2-Type", value);
+    }
+
+    /*
+     * Centrifuge-Alternative2-Url
+     */
+    static getCentrifugeAlternative2Url(): string {
+        return LocalStorageKit.get("Centrifuge-Alternative2-Url") || "";
+    }
+
+    /*
+     * Centrifuge-Alternative2-Url
+     */
+    static setCentrifugeAlternative2Url(value: string) {
+        LocalStorageKit.set("Centrifuge-Alternative2-Url", value);
+    }
 
 }
