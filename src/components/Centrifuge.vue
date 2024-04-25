@@ -1,6 +1,11 @@
 <script setup lang="ts">
+import _ from "lodash";
 import {ref, watch} from 'vue';
 import {LocalStorageUtil} from "@/_internal/utils/LocalStorageUtil";
+import type {TransportEndpoint, TransportName} from "centrifuge";
+import {CentrifugeClient} from "@/_internal/centrifuge/CentrifugeClient";
+import {WebSocketKit} from "@/_chimera/longConnection/WebSocketKit";
+import {JwtKit} from "@/_chimera/jwt/JwtKit";
 
 let credentialType = ref(LocalStorageUtil.getCentrifugeCredentialType()),
     token = ref(LocalStorageUtil.getCentrifugeToken()),
@@ -43,12 +48,67 @@ function alternative1UrlBlur() {
   LocalStorageUtil.setCentrifugeAlternative1Url(alternative1Url.value);
 }
 
-function connect(event: Event) {
+async function connect(event: Event) {
+  let endpoints: TransportEndpoint[] = [];
+  if (!WebSocketKit.checkUrl(wsUrl.value)) {
+    alert("");
+    return;
+  }
+  endpoints.push({
+    transport: "websocket",
+    endpoint: wsUrl.value
+  });
+  if (!_.isEmpty(alternative0Type.value) && !_.isEmpty(alternative0Url.value)) {
+    if (!CentrifugeClient.checkUrl(alternative0Url.value)) {
+      alert(`invalid alternative0Url: ${alternative0Url.value}`);
+      return;
+    }
+    endpoints.push({
+      transport: alternative0Type.value as TransportName,
+      endpoint: alternative0Url.value
+    });
+  }
+  if (!_.isEmpty(alternative1Type.value) && !_.isEmpty(alternative1Url.value)) {
+    if (!CentrifugeClient.checkUrl(alternative1Url.value)) {
+      alert(`invalid alternative1Url: ${alternative1Url.value}`);
+      return;
+    }
+    endpoints.push({
+      transport: alternative1Type.value as TransportName,
+      endpoint: alternative1Url.value
+    });
+  }
 
+  let tokenStr: string = "";
+  switch (credentialType.value) {
+    case "secret":
+      if (_.isEmpty(secret.value)) {
+        alert(`secret is empty`);
+        return;
+      }
+
+      tokenStr = await JwtKit.sign({
+        "test": "测试"
+      }, "HS256", secret.value);
+      break;
+    case "token":
+      if (_.isEmpty(token.value)) {
+        alert(`token is empty`);
+        return;
+      }
+
+      tokenStr = token.value;
+      break;
+    default:
+      alert(`invalid credentialType: ${credentialType.value}`);
+      return;
+  }
+
+  CentrifugeClient.connect(endpoints, tokenStr);
 }
 
 function disconnect(event: Event) {
-
+  CentrifugeClient.disconnect();
 }
 </script>
 
