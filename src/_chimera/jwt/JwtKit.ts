@@ -4,7 +4,7 @@
  */
 import * as jose from 'jose';
 
-export class JWTUtil {
+export class JwtKit {
     /*
      * 参考: https://github.com/panva/jose/blob/HEAD/docs/classes/jwt_sign.SignJWT.md
      */
@@ -19,4 +19,5 @@ export class JWTUtil {
             .setExpirationTime('2h')
             .sign(secretUA);
     }
+
 }
