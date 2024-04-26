@@ -22,10 +22,16 @@ export class CentrifugeClient {
         this.client.on('connected', function (ctx) {
             Console.println("connected");
         });
+        this.client.on('error', function (ctx) {
+            Console.println("error");
+        });
         this.client.on('disconnected', function (ctx) {
             Console.println("disconnected");
         });
         this.client.connect();
+
+        // this.client.newSubscription
+        // this.client.removeSubscription
     }
 
     static send() {
