@@ -76,6 +76,10 @@ export class CentrifugeClient {
             return;
         }
 
+        let subs = this.client.subscriptions();
+        for (const [i, sub] of Object.entries(subs)) {
+            sub.unsubscribe();
+        }
         this.client.disconnect();
         this.client = null;
     }
