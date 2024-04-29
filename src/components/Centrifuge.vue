@@ -4,11 +4,9 @@ import {ref, watch} from 'vue';
 import {LocalStorageUtil} from "@/_internal/utils/LocalStorageUtil";
 import type {TransportEndpoint, TransportName} from "centrifuge";
 import {CentrifugeClient} from "@/_internal/centrifuge/CentrifugeClient";
-import {JwtKit} from "@/_chimera/jwt/JwtKit";
+import {CentrifugeKit} from "@/_chimera/longConnection/CentrifugeKit";
 
-let credentialType = ref(LocalStorageUtil.getCentrifugeCredentialType()),
-    token = ref(LocalStorageUtil.getCentrifugeToken()),
-    secret = ref(LocalStorageUtil.getCentrifugeSecret());
+let secret = ref(LocalStorageUtil.getCentrifugeSecret());
 
 let alternative0Type = ref(LocalStorageUtil.getCentrifugeAlternative0Type()),
     alternative0Url = ref(LocalStorageUtil.getCentrifugeAlternative0Url()),
@@ -17,19 +15,12 @@ let alternative0Type = ref(LocalStorageUtil.getCentrifugeAlternative0Type()),
     alternative2Type = ref(LocalStorageUtil.getCentrifugeAlternative2Type()),
     alternative2Url = ref(LocalStorageUtil.getCentrifugeAlternative2Url());
 
-watch(credentialType, (newVal, oldVal) => {
-  LocalStorageUtil.setCentrifugeCredentialType(newVal);
-});
 watch(alternative0Type, (newVal, oldVal) => {
   LocalStorageUtil.setCentrifugeAlternative0Type(newVal);
 });
 watch(alternative1Type, (newVal, oldVal) => {
   LocalStorageUtil.setCentrifugeAlternative1Type(newVal);
 });
-
-function tokenBlur() {
-  LocalStorageUtil.setCentrifugeToken(token.value);
-}
 
 function secretBlur() {
   LocalStorageUtil.setCentrifugeSecret(secret.value);
@@ -88,33 +79,9 @@ async function connect(event: Event) {
     return;
   }
 
-  let tokenStr: string = "";
-  switch (credentialType.value) {
-    case "secret":
-      if (_.isEmpty(secret.value)) {
-        alert(`secret is empty`);
-        return;
-      }
-
-      tokenStr = await JwtKit.sign({
-        "sub": "1073",
-        "test": "测试"
-      }, "HS256", secret.value);
-      break;
-    case "token":
-      if (_.isEmpty(token.value)) {
-        alert(`token is empty`);
-        return;
-      }
-
-      tokenStr = token.value;
-      break;
-    default:
-      alert(`invalid credentialType: ${credentialType.value}`);
-      return;
-  }
-
-  CentrifugeClient.connect(endpoints, tokenStr);
+  let token = await CentrifugeKit.genToken({}, "HS256", secret.value, "24h", "1073");
+  let subToken = await CentrifugeKit.genSubToken({}, "HS256", secret.value, "24h", "1073", "test-channel");
+  CentrifugeClient.connect(endpoints, token, subToken);
 }
 
 function disconnect(event: Event) {
@@ -125,15 +92,10 @@ function disconnect(event: Event) {
 <template>
   <div>
     client credentials:
-    <select v-model="credentialType" class="margin-left">
+    <select class="margin-left" disabled>
       <option value="secret">token_hmac_secret_key</option>
-      <option value="token">token</option>
     </select>
-    <input v-if="credentialType=='secret'" v-model="secret" class="margin-left" style="width: 600px" type="text"
-           @blur="secretBlur">
-    <input v-else-if="credentialType=='token'" v-model="token" class="margin-left" style="width: 600px"
-           type="text"
-           @blur="tokenBlur">
+    <input v-model="secret" class="margin-left" style="width: 600px" type="text" @blur="secretBlur">
   </div>
   <br>
 

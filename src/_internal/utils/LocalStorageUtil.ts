@@ -68,20 +68,6 @@ export class LocalStorageUtil {
     }
 
     /*
-     * Centrifuge-CredentialType
-     */
-    static getCentrifugeCredentialType(): string {
-        return LocalStorageKit.get("Centrifuge-CredentialType") || "secret";
-    }
-
-    /*
-     * Centrifuge-CredentialType
-     */
-    static setCentrifugeCredentialType(value: string) {
-        LocalStorageKit.set("Centrifuge-CredentialType", value);
-    }
-
-    /*
      * Centrifuge-Secret
      */
     static getCentrifugeSecret(): string {
@@ -93,34 +79,6 @@ export class LocalStorageUtil {
      */
     static setCentrifugeSecret(value: string) {
         LocalStorageKit.set("Centrifuge-Secret", value);
-    }
-
-    /*
-     * Centrifuge-Token
-     */
-    static getCentrifugeToken(): string {
-        return LocalStorageKit.get("Centrifuge-Token") || "";
-    }
-
-    /*
-     * Centrifuge-Token
-     */
-    static setCentrifugeToken(value: string) {
-        LocalStorageKit.set("Centrifuge-Token", value);
-    }
-
-    /*
-     * Centrifuge-WsUrl
-     */
-    static getCentrifugeWsUrl(): string {
-        return LocalStorageKit.get("Centrifuge-WsUrl") || "";
-    }
-
-    /*
-     * Centrifuge-WsUrl
-     */
-    static setCentrifugeWsUrl(value: string) {
-        LocalStorageKit.set("Centrifuge-WsUrl", value);
     }
 
     /*

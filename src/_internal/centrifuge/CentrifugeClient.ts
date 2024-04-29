@@ -7,7 +7,7 @@ import {SseKit} from "@/_chimera/longConnection/SseKit";
 export class CentrifugeClient {
     private static client: Centrifuge | null = null;
 
-    static connect(endpoints: Array<TransportEndpoint>, token: string) {
+    static connect(endpoints: Array<TransportEndpoint>, token: string, subToken: string) {
         this.disconnect(false);
 
         let opts: Partial<Options> = {
