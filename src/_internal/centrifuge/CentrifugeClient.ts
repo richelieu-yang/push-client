@@ -28,10 +28,34 @@ export class CentrifugeClient {
         this.client.on('disconnected', function (ctx) {
             Console.println("disconnected");
         });
-        this.client.connect();
 
-        // this.client.newSubscription
-        // this.client.removeSubscription
+        let sub = this.client.newSubscription("example", {
+            token: token,
+        });
+        sub.on("publication", function (ctx) {
+            Console.println(`publication: ${ctx.data}}`);
+        });
+        sub.on("join", function (ctx) {
+            Console.println(`join`);
+        });
+        sub.on("leave", function (ctx) {
+            Console.println(`leave`);
+        });
+        sub.on("error", function (ctx) {
+            Console.println(`error`);
+        });
+        sub.on("subscribing", function (ctx) {
+            Console.println(`subscribing`);
+        });
+        sub.on("subscribed", function (ctx) {
+            Console.println(`subscribed`);
+        });
+        sub.on("unsubscribed", function (ctx) {
+            Console.println(`unsubscribed`);
+        });
+
+        sub.subscribe();
+        this.client.connect();
     }
 
     static send() {

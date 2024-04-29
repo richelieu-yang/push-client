@@ -97,6 +97,7 @@ async function connect(event: Event) {
       }
 
       tokenStr = await JwtKit.sign({
+        "sub": "1073",
         "test": "测试"
       }, "HS256", secret.value);
       break;
