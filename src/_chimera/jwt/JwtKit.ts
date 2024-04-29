@@ -1,6 +1,6 @@
 /*
  * jose: https://www.npmjs.com/package/jose
- * jsonwebtoken库不能用（貌似需要nodejs环境）.
+ * jsonwebtoken库不能用（貌似需要nodejs环境）
  */
 import * as jose from 'jose';
 
