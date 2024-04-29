@@ -80,7 +80,7 @@ async function connect(event: Event) {
   }
 
   let token = await CentrifugeKit.genToken({}, "HS256", secret.value, "24h", "1073");
-  let subToken = await CentrifugeKit.genSubToken({}, "HS256", secret.value, "24h", "1073", "test-channel");
+  let subToken = await CentrifugeKit.genSubToken({}, "HS256", secret.value, "24h", "1073", CentrifugeClient.defChannel);
   CentrifugeClient.connect(endpoints, token, subToken);
 }
 

@@ -7,8 +7,13 @@ import {SseKit} from "@/_chimera/longConnection/SseKit";
 export class CentrifugeClient {
     private static client: Centrifuge | null = null;
 
+    static defChannel: string = "test-channel";
+
     static connect(endpoints: Array<TransportEndpoint>, token: string, subToken: string) {
         this.disconnect(false);
+
+        Console.println(`token: ${token}`);
+        Console.println(`subToken: ${subToken}`);
 
         let opts: Partial<Options> = {
             debug: true,
@@ -29,8 +34,8 @@ export class CentrifugeClient {
             Console.println("disconnected");
         });
 
-        let sub = this.client.newSubscription("example", {
-            token: token,
+        let sub = this.client.newSubscription(this.defChannel, {
+            token: subToken,
         });
         sub.on("publication", function (ctx) {
             Console.println(`publication: ${ctx.data}}`);
