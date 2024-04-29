@@ -83,7 +83,7 @@ async function connect(event: Event) {
   let user = UuidKit.v4();
   let token = await CentrifugeKit.genToken({}, "HS256", secret.value, "24h", user);
   let subToken = await CentrifugeKit.genSubToken({}, "HS256", secret.value, "24h", user, CentrifugeClient.defChannel);
-  CentrifugeClient.connect(endpoints, token, subToken, user);
+  CentrifugeClient.connect(endpoints, user, token, subToken);
 }
 
 function disconnect(event: Event) {

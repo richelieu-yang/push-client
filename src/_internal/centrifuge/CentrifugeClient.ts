@@ -9,7 +9,7 @@ export class CentrifugeClient {
 
     static defChannel: string = "test-channel";
 
-    static connect(endpoints: Array<TransportEndpoint>, token: string, subToken: string, user: string) {
+    static connect(endpoints: Array<TransportEndpoint>, user: string, token: string, subToken: string) {
         this.disconnect(false);
 
         Console.println(`user: ${user}`);
@@ -27,6 +27,8 @@ export class CentrifugeClient {
         });
         this.client.on('connected', function (ctx) {
             Console.println("connected");
+
+            // CentrifugeClient.publish("hello world");
         });
         this.client.on('error', function (ctx) {
             Console.println("error");
@@ -39,13 +41,13 @@ export class CentrifugeClient {
             token: subToken,
         });
         sub.on("publication", function (ctx) {
-            Console.println(`publication: ${ctx.data}}`);
+            Console.println(`publication: ${ctx.data}`);
         });
         sub.on("join", function (ctx) {
-            Console.println(`join`);
+            Console.println(`User(user: ${ctx.info.user}, client: ${ctx.info.client}) joins.`);
         });
         sub.on("leave", function (ctx) {
-            Console.println(`leave`);
+            Console.println(`User(user: ${ctx.info.user}, client: ${ctx.info.client}) leaves.`);
         });
         sub.on("error", function (ctx) {
             Console.println(`error`);
@@ -55,6 +57,8 @@ export class CentrifugeClient {
         });
         sub.on("subscribed", function (ctx) {
             Console.println(`subscribed`);
+
+            sub.publish(`User(${user}) joins`);
         });
         sub.on("unsubscribed", function (ctx) {
             Console.println(`unsubscribed`);
@@ -64,9 +68,15 @@ export class CentrifugeClient {
         this.client.connect();
     }
 
-    static send() {
-        // TODO: https://github.com/centrifugal/centrifuge-js?tab=readme-ov-file#send-method
+    static publish(data: any) {
+        if (!data) {
+            return;
+        }
+        if (this.client == null || this.client.state != "connected") {
+            return;
+        }
 
+        this.client.publish(this.defChannel, data);
     }
 
     static disconnect(alertFlag: boolean = true) {
