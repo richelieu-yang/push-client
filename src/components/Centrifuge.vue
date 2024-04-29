@@ -5,6 +5,7 @@ import {LocalStorageUtil} from "@/_internal/utils/LocalStorageUtil";
 import type {TransportEndpoint, TransportName} from "centrifuge";
 import {CentrifugeClient} from "@/_internal/centrifuge/CentrifugeClient";
 import {CentrifugeKit} from "@/_chimera/longConnection/CentrifugeKit";
+import {UuidKit} from "@/_chimera/id/UuidKit";
 
 let secret = ref(LocalStorageUtil.getCentrifugeSecret());
 
@@ -79,9 +80,10 @@ async function connect(event: Event) {
     return;
   }
 
-  let token = await CentrifugeKit.genToken({}, "HS256", secret.value, "24h", "1073");
-  let subToken = await CentrifugeKit.genSubToken({}, "HS256", secret.value, "24h", "1073", CentrifugeClient.defChannel);
-  CentrifugeClient.connect(endpoints, token, subToken);
+  let user = UuidKit.v4();
+  let token = await CentrifugeKit.genToken({}, "HS256", secret.value, "24h", user);
+  let subToken = await CentrifugeKit.genSubToken({}, "HS256", secret.value, "24h", user, CentrifugeClient.defChannel);
+  CentrifugeClient.connect(endpoints, token, subToken, user);
 }
 
 function disconnect(event: Event) {

@@ -9,9 +9,10 @@ export class CentrifugeClient {
 
     static defChannel: string = "test-channel";
 
-    static connect(endpoints: Array<TransportEndpoint>, token: string, subToken: string) {
+    static connect(endpoints: Array<TransportEndpoint>, token: string, subToken: string, user: string) {
         this.disconnect(false);
 
+        Console.println(`user: ${user}`);
         Console.println(`token: ${token}`);
         Console.println(`subToken: ${subToken}`);
 
