@@ -22,12 +22,14 @@
     "lodash": "^4.17.21",
     "npm": "^10.5.2",
     "pako": "^2.1.0",
+    "uuid": "^9.0.1",
     "vue": "^3.4.21"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
     "@types/node": "^20.12.5",
     "@types/pako": "^2.0.3",
+    "@types/uuid": "^9.0.8",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/tsconfig": "^0.5.1",
     "npm-run-all2": "^6.1.2",
