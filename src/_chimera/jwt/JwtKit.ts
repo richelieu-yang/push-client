@@ -7,8 +7,10 @@ import * as jose from 'jose';
 export class JwtKit {
     /*
      * 参考: https://github.com/panva/jose/blob/HEAD/docs/classes/jwt_sign.SignJWT.md
+     *
+     * @param alg e.g."HS256"
      */
-    static sign(payload: any, alg: string = "HS256", secret: string, expirationTime: string) {
+    static sign(payload: any, alg: string, secret: string, expirationTime: string) {
         if (!payload) {
             payload = {};
         }
