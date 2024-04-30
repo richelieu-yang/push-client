@@ -41,7 +41,11 @@ export class CentrifugeClient {
             token: subToken,
         });
         sub.on("publication", function (ctx) {
-            Console.println(`publication: ${ctx.data}`);
+            if (typeof ctx.data === "string") {
+                Console.println(`publication: ${ctx.data}`);
+                return
+            }
+            Console.println(`publication: ${JSON.stringify(ctx.data)}`);
         });
         sub.on("join", function (ctx) {
             Console.println(`User(user: ${ctx.info.user}, client: ${ctx.info.client}) joins.`);
