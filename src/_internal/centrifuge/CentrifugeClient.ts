@@ -19,22 +19,21 @@ export class CentrifugeClient {
         let opts: Partial<Options> = {
             debug: true,
             token: token,
+            emulationEndpoint: "http://localhost:8000/emulation"
         };
         this.client = new Centrifuge(endpoints, opts);
         // this.client.setToken("<token>");
         this.client.on('connecting', function (ctx) {
-            Console.println("connecting");
+            Console.println(`connecting: ${ctx.code}, ${ctx.reason}`);
         });
         this.client.on('connected', function (ctx) {
-            Console.println("connected");
-
-            // CentrifugeClient.publish("hello world");
-        });
-        this.client.on('error', function (ctx) {
-            Console.println("error");
+            Console.println(`connected over ${ctx.transport}`);
         });
         this.client.on('disconnected', function (ctx) {
-            Console.println("disconnected");
+            Console.println(`disconnected: ${ctx.code}, ${ctx.reason}`);
+        });
+        this.client.on('error', function (ctx) {
+            Console.println(`error: type(${ctx.type})、transport(${ctx.transport})、error.code(${ctx.error.code})、error.message(${ctx.error.message})`);
         });
 
         let sub = this.client.newSubscription(this.defChannel, {
@@ -57,15 +56,13 @@ export class CentrifugeClient {
             Console.println(`error`);
         });
         sub.on("subscribing", function (ctx) {
-            Console.println(`subscribing`);
+            Console.println(`subscribing: ${ctx.code}, ${ctx.reason}`);
         });
         sub.on("subscribed", function (ctx) {
             Console.println(`subscribed`);
-
-            sub.publish(`User(${user}) joins`);
         });
         sub.on("unsubscribed", function (ctx) {
-            Console.println(`unsubscribed`);
+            Console.println(`unsubscribed: ${ctx.code}, ${ctx.reason}`);
         });
 
         sub.subscribe();
