@@ -145,15 +145,15 @@ function sendRpc(event: Event) {
   <br>
 
   <div>
-    method:
-    <br>
-    <input style="width: 600px" type="text">
-    <br>
-    data:
-    <br>
-    <input style="width: 600px" type="text">
-    <br>
-    <button @click="sendRpc($event)">rpc</button>
+    <!--    method:-->
+    <!--    <br>-->
+    <!--    <input style="width: 600px" type="text">-->
+    <!--    <br>-->
+    <!--    data:-->
+    <!--    <br>-->
+    <!--    <input style="width: 600px" type="text">-->
+    <!--    <br>-->
+    <button @click="sendRpc($event)">send rpc</button>
   </div>
   <br>
 
