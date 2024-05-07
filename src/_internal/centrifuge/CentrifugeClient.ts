@@ -100,4 +100,17 @@ export class CentrifugeClient {
         return WebSocketKit.checkUrl(url) || SseKit.checkUrl(url);
     }
 
+    static rpc(method: string, data: any) {
+        if (this.client == null) {
+            alert("No connection now!");
+            return;
+        }
+
+        this.client.rpc(method, data).then(function (res) {
+            console.log('rpc result', res);
+        }, function (err) {
+            console.log('rpc error', err);
+        });
+    }
+
 }

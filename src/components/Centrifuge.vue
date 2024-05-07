@@ -89,6 +89,10 @@ async function connect(event: Event) {
 function disconnect(event: Event) {
   CentrifugeClient.disconnect();
 }
+
+function sendRpc(event: Event) {
+  CentrifugeClient.rpc("my.method.name", {"answer": "2019"});
+}
 </script>
 
 <template>
@@ -137,6 +141,19 @@ function disconnect(event: Event) {
       <option value="sockjs">sockjs(Deprecated)</option>
     </select>
     <input v-model="alternative2Url" class="margin-left" style="width: 600px" type="text" @blur="alternative2UrlBlur">
+  </div>
+  <br>
+
+  <div>
+    method:
+    <br>
+    <input style="width: 600px" type="text">
+    <br>
+    data:
+    <br>
+    <input style="width: 600px" type="text">
+    <br>
+    <button @click="sendRpc($event)">rpc</button>
   </div>
   <br>
 
