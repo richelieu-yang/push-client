@@ -22,6 +22,9 @@ watch(alternative0Type, (newVal, oldVal) => {
 watch(alternative1Type, (newVal, oldVal) => {
   LocalStorageUtil.setCentrifugeAlternative1Type(newVal);
 });
+watch(alternative2Type, (newVal, oldVal) => {
+  LocalStorageUtil.setCentrifugeAlternative2Type(newVal);
+});
 
 function secretBlur() {
   LocalStorageUtil.setCentrifugeSecret(secret.value);

@@ -85,7 +85,7 @@ export class LocalStorageUtil {
      * Centrifuge-Alternative0-Type
      */
     static getCentrifugeAlternative0Type(): string {
-        return LocalStorageKit.get("Centrifuge-Alternative0-Type") || "websocket";
+        return LocalStorageKit.get("Centrifuge-Alternative0-Type") || "";
     }
 
     /*
