@@ -9,7 +9,7 @@ import {Uint8ArrayKit} from "@/_chimera/type/Uint8ArrayKit";
 export class CentrifugeClient {
     private static client: Centrifuge | ProtobufCentrifuge | null = null;
 
-    static defChannel: string = "test-channel";
+    static defChannel: string = "test";
 
     static connect(protocol: string, endpoints: Array<TransportEndpoint>, user: string, token: string, subToken: string) {
         this.disconnect(false);
