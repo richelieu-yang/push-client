@@ -4,6 +4,7 @@ import {Centrifuge} from 'centrifuge/build/protobuf';
 import {Console} from "@/_internal/utils/Console";
 import {WebSocketKit} from "@/_chimera/longConnection/WebSocketKit";
 import {SseKit} from "@/_chimera/longConnection/SseKit";
+import {Uint8ArrayKit} from "@/_chimera/type/Uint8ArrayKit";
 
 export class CentrifugeClient {
     private static client: Centrifuge | null = null;
@@ -42,12 +43,18 @@ export class CentrifugeClient {
             token: subToken,
         });
         sub.on("publication", function (ctx) {
+            console.log(typeof ctx.data);
             console.log(ctx.data);
 
             if (typeof ctx.data === "string") {
                 Console.println(`publication: ${ctx.data}`);
                 return
+            } else if (ctx.data instanceof Uint8Array) {
+                let text = Uint8ArrayKit.toString(ctx.data);
+                Console.println(`publication: ${text}`);
+                return
             }
+
             Console.println(`publication: ${JSON.stringify(ctx.data)}`);
         });
         sub.on("join", function (ctx) {
