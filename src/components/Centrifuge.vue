@@ -7,7 +7,8 @@ import {CentrifugeClient} from "@/_internal/centrifuge/CentrifugeClient";
 import {CentrifugeKit} from "@/_chimera/longConnection/CentrifugeKit";
 import {UuidKit} from "@/_chimera/id/UuidKit";
 
-let secret = ref(LocalStorageUtil.getCentrifugeSecret());
+let protocol = ref(LocalStorageUtil.getCentrifugeProtocol()),
+    secret = ref(LocalStorageUtil.getCentrifugeSecret());
 
 let alternative0Type = ref(LocalStorageUtil.getCentrifugeAlternative0Type()),
     alternative0Url = ref(LocalStorageUtil.getCentrifugeAlternative0Url()),
@@ -16,6 +17,9 @@ let alternative0Type = ref(LocalStorageUtil.getCentrifugeAlternative0Type()),
     alternative2Type = ref(LocalStorageUtil.getCentrifugeAlternative2Type()),
     alternative2Url = ref(LocalStorageUtil.getCentrifugeAlternative2Url());
 
+watch(protocol, (newVal, old_Val) => {
+  LocalStorageUtil.setCentrifugeProtocol(newVal);
+});
 watch(alternative0Type, (newVal, oldVal) => {
   LocalStorageUtil.setCentrifugeAlternative0Type(newVal);
 });
@@ -86,7 +90,7 @@ async function connect(event: Event) {
   let user = UuidKit.v4();
   let token = await CentrifugeKit.genToken({}, "HS256", secret.value, "24h", user);
   let subToken = await CentrifugeKit.genSubToken({}, "HS256", secret.value, "24h", user, CentrifugeClient.defChannel);
-  CentrifugeClient.connect(endpoints, user, token, subToken);
+  CentrifugeClient.connect(protocol.value, endpoints, user, token, subToken);
 }
 
 function disconnect(event: Event) {
@@ -100,6 +104,12 @@ function sendRpc(event: Event) {
 
 <template>
   <div>
+    protocol:
+    <select v-model="protocol" class="margin-left">
+      <option value="json">JSON</option>
+      <option value="protobuf">Protobuf binary</option>
+    </select>
+    <br>
     client credentials:
     <select class="margin-left" disabled>
       <option value="secret">token_hmac_secret_key</option>
@@ -119,7 +129,6 @@ function sendRpc(event: Event) {
       <option value="websocket">websocket</option>
       <option value="sse">sse</option>
       <option value="http_stream">http_stream</option>
-      <option value="sockjs">sockjs(Deprecated)</option>
     </select>
     <input v-model="alternative0Url" class="margin-left" style="width: 600px" type="text" @blur="alternative0UrlBlur">
   </div>
@@ -130,7 +139,6 @@ function sendRpc(event: Event) {
       <option value="websocket">websocket</option>
       <option value="sse">sse</option>
       <option value="http_stream">http_stream</option>
-      <option value="sockjs">sockjs(Deprecated)</option>
     </select>
     <input v-model="alternative1Url" class="margin-left" style="width: 600px" type="text" @blur="alternative1UrlBlur">
   </div>
@@ -141,7 +149,6 @@ function sendRpc(event: Event) {
       <option value="websocket">websocket</option>
       <option value="sse">sse</option>
       <option value="http_stream">http_stream</option>
-      <option value="sockjs">sockjs(Deprecated)</option>
     </select>
     <input v-model="alternative2Url" class="margin-left" style="width: 600px" type="text" @blur="alternative2UrlBlur">
   </div>

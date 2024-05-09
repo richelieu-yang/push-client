@@ -68,6 +68,20 @@ export class LocalStorageUtil {
     }
 
     /*
+     * Centrifuge-Protocol
+     */
+    static getCentrifugeProtocol(): string {
+        return LocalStorageKit.get("Centrifuge-Protocol") || "json";
+    }
+
+    /*
+     * Centrifuge-Protocol
+     */
+    static setCentrifugeProtocol(value: string) {
+        LocalStorageKit.set("Centrifuge-Protocol", value);
+    }
+
+    /*
      * Centrifuge-Secret
      */
     static getCentrifugeSecret(): string {

@@ -1,17 +1,17 @@
 import type {Options, TransportEndpoint} from "centrifuge";
-// import {Centrifuge} from 'centrifuge';
-import {Centrifuge} from 'centrifuge/build/protobuf';
+import {Centrifuge} from 'centrifuge';
+import {Centrifuge as ProtobufCentrifuge} from 'centrifuge/build/protobuf';
 import {Console} from "@/_internal/utils/Console";
 import {WebSocketKit} from "@/_chimera/longConnection/WebSocketKit";
 import {SseKit} from "@/_chimera/longConnection/SseKit";
 import {Uint8ArrayKit} from "@/_chimera/type/Uint8ArrayKit";
 
 export class CentrifugeClient {
-    private static client: Centrifuge | null = null;
+    private static client: Centrifuge | ProtobufCentrifuge | null = null;
 
     static defChannel: string = "test-channel";
 
-    static connect(endpoints: Array<TransportEndpoint>, user: string, token: string, subToken: string) {
+    static connect(protocol: string, endpoints: Array<TransportEndpoint>, user: string, token: string, subToken: string) {
         this.disconnect(false);
 
         Console.println(`user: ${user}`);
@@ -24,7 +24,12 @@ export class CentrifugeClient {
             emulationEndpoint: "http://localhost:8000/emulation",
             websocket: WebSocket
         };
-        this.client = new Centrifuge(endpoints, opts);
+
+        if (protocol === "protobuf") {
+            this.client = new ProtobufCentrifuge(endpoints, opts);
+        } else {
+            this.client = new Centrifuge(endpoints, opts);
+        }
         // this.client.setToken("<token>");
         this.client.on('connecting', function (ctx) {
             Console.println(`connecting: ${ctx.code}, ${ctx.reason}`);
@@ -43,7 +48,6 @@ export class CentrifugeClient {
             token: subToken,
         });
         sub.on("publication", function (ctx) {
-            console.log(typeof ctx.data);
             console.log(ctx.data);
 
             if (typeof ctx.data === "string") {
