@@ -121,10 +121,22 @@ export class CentrifugeClient {
             return;
         }
 
-        this.client.rpc(method, data).then(function (res) {
-            console.log('rpc result', res);
+        this.client.rpc(method, data).then(function (rpcResult) {
+            let data = rpcResult.data;
+            console.log('rpc result data:', data);
+
+            let response: any;
+            if (data instanceof Uint8Array) {
+                // protocol: Protobuf binary
+                let json = Uint8ArrayKit.toString(data);
+                response = JSON.parse(json);
+            } else {
+                // protocol: JSON
+                response = data;
+            }
+            Console.println(`rpc response: ${JSON.stringify(response)}`);
         }, function (err) {
-            console.log('rpc error', err);
+            console.log('rpc error:', err);
         });
     }
 
