@@ -118,39 +118,39 @@ function sendRpc(event: Event) {
   </div>
   <br>
 
-  TransportEndpoints:
-  <br>
-  Bidirectional WebSocket default endpoint: ws://localhost:8000/connection/websocket
-  <br>
-  <!-- 可选项0 -->
   <div>
-    <select v-model="alternative0Type" style="width: 140px">
-      <option value="">null</option>
-      <option value="websocket">websocket</option>
-      <option value="sse">sse</option>
-      <option value="http_stream">http_stream</option>
-    </select>
-    <input v-model="alternative0Url" class="margin-left" style="width: 600px" type="text" @blur="alternative0UrlBlur">
-  </div>
-  <!-- 可选项1 -->
-  <div>
-    <select v-model="alternative1Type" style="width: 140px">
-      <option value="">null</option>
-      <option value="websocket">websocket</option>
-      <option value="sse">sse</option>
-      <option value="http_stream">http_stream</option>
-    </select>
-    <input v-model="alternative1Url" class="margin-left" style="width: 600px" type="text" @blur="alternative1UrlBlur">
-  </div>
-  <!-- 可选项2 -->
-  <div>
-    <select v-model="alternative2Type" style="width: 140px">
-      <option value="">null</option>
-      <option value="websocket">websocket</option>
-      <option value="sse">sse</option>
-      <option value="http_stream">http_stream</option>
-    </select>
-    <input v-model="alternative2Url" class="margin-left" style="width: 600px" type="text" @blur="alternative2UrlBlur">
+    TransportEndpoints(default endpoint of Bidirectional WebSocket: ws://localhost:8000/connection/websocket):
+    <br>
+    <!-- 可选项0 -->
+    <div>
+      <select v-model="alternative0Type" style="width: 140px">
+        <option value="">null</option>
+        <option value="websocket">websocket</option>
+        <option value="sse">sse</option>
+        <option value="http_stream">http_stream</option>
+      </select>
+      <input v-model="alternative0Url" class="margin-left" style="width: 600px" type="text" @blur="alternative0UrlBlur">
+    </div>
+    <!-- 可选项1 -->
+    <div>
+      <select v-model="alternative1Type" style="width: 140px">
+        <option value="">null</option>
+        <option value="websocket">websocket</option>
+        <option value="sse">sse</option>
+        <option value="http_stream">http_stream</option>
+      </select>
+      <input v-model="alternative1Url" class="margin-left" style="width: 600px" type="text" @blur="alternative1UrlBlur">
+    </div>
+    <!-- 可选项2 -->
+    <div>
+      <select v-model="alternative2Type" style="width: 140px">
+        <option value="">null</option>
+        <option value="websocket">websocket</option>
+        <option value="sse">sse</option>
+        <option value="http_stream">http_stream</option>
+      </select>
+      <input v-model="alternative2Url" class="margin-left" style="width: 600px" type="text" @blur="alternative2UrlBlur">
+    </div>
   </div>
   <br>
 
