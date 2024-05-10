@@ -24,12 +24,21 @@ watch(protocol, (newVal, old_Val) => {
   LocalStorageUtil.setCentrifugeProtocol(newVal);
 });
 watch(alternative0Type, (newVal, oldVal) => {
+  CentrifugeClient.disconnect(false);
+  Console.clear();
+
   LocalStorageUtil.setCentrifugeAlternative0Type(newVal);
 });
 watch(alternative1Type, (newVal, oldVal) => {
+  CentrifugeClient.disconnect(false);
+  Console.clear();
+
   LocalStorageUtil.setCentrifugeAlternative1Type(newVal);
 });
 watch(alternative2Type, (newVal, oldVal) => {
+  CentrifugeClient.disconnect(false);
+  Console.clear();
+  
   LocalStorageUtil.setCentrifugeAlternative2Type(newVal);
 });
 
