@@ -8,11 +8,14 @@ import {Uint8ArrayKit} from "@/_chimera/type/Uint8ArrayKit";
 
 export class CentrifugeClient {
     private static client: Centrifuge | ProtobufCentrifuge | null = null;
+    private static protocol: string = "";
 
     static defChannel: string = "test";
 
     static connect(protocol: string, endpoints: Array<TransportEndpoint>, user: string, token: string, subToken: string) {
         this.disconnect(false);
+
+        this.protocol = protocol;
 
         Console.println(`user: ${user}`);
         Console.println(`token: ${token}`);
@@ -25,7 +28,7 @@ export class CentrifugeClient {
             websocket: WebSocket
         };
 
-        if (protocol === "protobuf") {
+        if (this.isProtobuf()) {
             this.client = new ProtobufCentrifuge(endpoints, opts);
         } else {
             this.client = new Centrifuge(endpoints, opts);
@@ -96,6 +99,8 @@ export class CentrifugeClient {
     }
 
     static disconnect(alertFlag: boolean = true) {
+        this.protocol = "";
+
         if (this.client == null) {
             if (alertFlag) {
                 alert("No connection now!");
@@ -121,7 +126,15 @@ export class CentrifugeClient {
             return;
         }
 
-        this.client.rpc(method, data).then(function (rpcResult) {
+        let rpcData: any;
+        if (this.isProtobuf()) {
+            // Make sure data is properly encoded when calling methods of Centrifuge Protobuf-based instance.
+            // 使用 protobuf 协议，需要额外编码为Uint8Array实例
+            rpcData = new TextEncoder().encode(JSON.stringify(data));
+        } else {
+            rpcData = data;
+        }
+        this.client.rpc(method, rpcData).then(function (rpcResult) {
             let data = rpcResult.data;
             console.log('rpc result data:', data);
 
@@ -138,6 +151,10 @@ export class CentrifugeClient {
         }, function (err) {
             console.log('rpc error:', err);
         });
+    }
+
+    private static isProtobuf(): boolean {
+        return this.protocol === "protobuf"
     }
 
 }
