@@ -6,10 +6,10 @@ import type {TransportEndpoint, TransportName} from "centrifuge";
 import {CentrifugeClient} from "@/_internal/centrifuge/CentrifugeClient";
 import {CentrifugeKit} from "@/_chimera/longConnection/CentrifugeKit";
 import {UuidKit} from "@/_chimera/id/UuidKit";
+import {Console} from "@/_internal/utils/Console";
 
 let protocol = ref(LocalStorageUtil.getCentrifugeProtocol()),
     secret = ref(LocalStorageUtil.getCentrifugeSecret());
-
 let alternative0Type = ref(LocalStorageUtil.getCentrifugeAlternative0Type()),
     alternative0Url = ref(LocalStorageUtil.getCentrifugeAlternative0Url()),
     alternative1Type = ref(LocalStorageUtil.getCentrifugeAlternative1Type()),
@@ -18,6 +18,9 @@ let alternative0Type = ref(LocalStorageUtil.getCentrifugeAlternative0Type()),
     alternative2Url = ref(LocalStorageUtil.getCentrifugeAlternative2Url());
 
 watch(protocol, (newVal, old_Val) => {
+  CentrifugeClient.disconnect(false);
+  Console.clear();
+
   LocalStorageUtil.setCentrifugeProtocol(newVal);
 });
 watch(alternative0Type, (newVal, oldVal) => {
@@ -98,7 +101,9 @@ function disconnect(event: Event) {
 }
 
 function sendRpc(event: Event) {
-  CentrifugeClient.rpc("my.method.name", {"answer": "2019"});
+  CentrifugeClient.rpc("my.method.name", {
+    "input": "hello"
+  });
 }
 </script>
 
@@ -155,6 +160,12 @@ function sendRpc(event: Event) {
   <br>
 
   <div>
+    <button @click="connect($event)">Connect</button>
+    <button class="margin-left" @click="disconnect($event)">Disconnect</button>
+  </div>
+  <br>
+
+  <div>
     <!--    method:-->
     <!--    <br>-->
     <!--    <input style="width: 600px" type="text">-->
@@ -166,11 +177,6 @@ function sendRpc(event: Event) {
     <button @click="sendRpc($event)">send rpc</button>
   </div>
   <br>
-
-  <div>
-    <button @click="connect($event)">Connect</button>
-    <button class="margin-left" @click="disconnect($event)">Disconnect</button>
-  </div>
 </template>
 
 <style scoped>
