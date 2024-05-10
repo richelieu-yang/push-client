@@ -5,6 +5,7 @@ import {Console} from "@/_internal/utils/Console";
 import {WebSocketKit} from "@/_chimera/longConnection/WebSocketKit";
 import {SseKit} from "@/_chimera/longConnection/SseKit";
 import {Uint8ArrayKit} from "@/_chimera/type/Uint8ArrayKit";
+import {StringKit} from "@/_chimera/type/StringKit";
 
 export class CentrifugeClient {
     private static client: Centrifuge | ProtobufCentrifuge | null = null;
@@ -130,7 +131,7 @@ export class CentrifugeClient {
         if (this.isProtobuf()) {
             // Make sure data is properly encoded when calling methods of Centrifuge Protobuf-based instance.
             // 使用 protobuf 协议，需要额外编码为Uint8Array实例
-            rpcData = new TextEncoder().encode(JSON.stringify(data));
+            rpcData = StringKit.toUint8Array(JSON.stringify(data));
         } else {
             rpcData = data;
         }
