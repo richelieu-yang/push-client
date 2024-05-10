@@ -17,7 +17,7 @@ let alternative0Type = ref(LocalStorageUtil.getCentrifugeAlternative0Type()),
     alternative2Type = ref(LocalStorageUtil.getCentrifugeAlternative2Type()),
     alternative2Url = ref(LocalStorageUtil.getCentrifugeAlternative2Url());
 
-watch(protocol, (newVal, old_Val) => {
+watch(protocol, (newVal, oldVal) => {
   CentrifugeClient.disconnect(false);
   Console.clear();
 
