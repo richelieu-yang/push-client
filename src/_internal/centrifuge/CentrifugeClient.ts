@@ -42,11 +42,12 @@ export class CentrifugeClient {
 
         let token = await CentrifugeKit.genToken({}, "HS256", this.secret, "24h", user);
         let subToken = await CentrifugeKit.genSubToken({}, "HS256", this.secret, "24h", user, this.channel);
-        Console.println(`user: ${user}`);
-        Console.println(`channel: ${this.channel}`);
-        Console.println(`secret: ${this.secret}`);
-        Console.println(`token: ${token}`);
-        Console.println(`subToken: ${subToken}`);
+        Console.println(`user: [${user}]`);
+        Console.println(`channel: [${this.channel}]`);
+        Console.println(`secret: [${this.secret}]`);
+        Console.println(`token: [${token}]`);
+        Console.println(`subToken: [${subToken}]`);
+        Console.println("------------------------------------------------");
 
         let opts: Partial<Options> = {
             debug: true,
