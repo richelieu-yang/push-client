@@ -1,3 +1,4 @@
+import _ from "lodash";
 import type {Options, TransportEndpoint} from "centrifuge";
 import {Centrifuge} from 'centrifuge';
 import {Centrifuge as ProtobufCentrifuge} from 'centrifuge/build/protobuf';
@@ -6,19 +7,44 @@ import {WebSocketKit} from "@/_chimera/longConnection/WebSocketKit";
 import {SseKit} from "@/_chimera/longConnection/SseKit";
 import {Uint8ArrayKit} from "@/_chimera/type/Uint8ArrayKit";
 import {StringKit} from "@/_chimera/type/StringKit";
+import {LocalStorageUtil} from "@/_internal/utils/LocalStorageUtil";
+import {UuidKit} from "@/_chimera/id/UuidKit";
+import {CentrifugeKit} from "@/_chimera/longConnection/CentrifugeKit";
 
 export class CentrifugeClient {
     private static client: Centrifuge | ProtobufCentrifuge | null = null;
-    private static protocol: string = "";
 
-    static defChannel: string = "test";
+    static protocol: string = LocalStorageUtil.getCentrifugeProtocol();
+    static user: string = LocalStorageUtil.getCentrifugeUser();
+    static channel: string = LocalStorageUtil.getCentrifugeChannel();
+    static secret: string = LocalStorageUtil.getCentrifugeSecret();
 
-    static connect(protocol: string, endpoints: Array<TransportEndpoint>, user: string, token: string, subToken: string) {
+    static async connect(endpoints: Array<TransportEndpoint>) {
         this.disconnect(false);
 
-        this.protocol = protocol;
+        if (_.isEmpty(endpoints)) {
+            alert(`You need at least one valid TransportEndpoint!`);
+            return;
+        }
+        if (_.isEmpty(this.secret)) {
+            alert("secret is empty!");
+            return;
+        }
+        if (_.isEmpty(this.channel)) {
+            alert("channel is empty!");
+            return;
+        }
+        let user: string = this.user;
+        if (_.isEmpty(user)) {
+            user = UuidKit.v4();
+        }
 
+
+        let token = await CentrifugeKit.genToken({}, "HS256", this.secret, "24h", user);
+        let subToken = await CentrifugeKit.genSubToken({}, "HS256", this.secret, "24h", user, this.channel);
         Console.println(`user: ${user}`);
+        Console.println(`channel: ${this.channel}`);
+        Console.println(`secret: ${this.secret}`);
         Console.println(`token: ${token}`);
         Console.println(`subToken: ${subToken}`);
 
@@ -48,7 +74,7 @@ export class CentrifugeClient {
             Console.println(`error: type(${ctx.type})、transport(${ctx.transport})、error.code(${ctx.error.code})、error.message(${ctx.error.message})`);
         });
 
-        let sub = this.client.newSubscription(this.defChannel, {
+        let sub = this.client.newSubscription(this.channel, {
             token: subToken,
         });
         sub.on("publication", function (ctx) {
@@ -96,12 +122,10 @@ export class CentrifugeClient {
             return;
         }
 
-        this.client.publish(this.defChannel, data);
+        this.client.publish(this.channel, data);
     }
 
     static disconnect(alertFlag: boolean = true) {
-        this.protocol = "";
-
         if (this.client == null) {
             if (alertFlag) {
                 alert("No connection now!");

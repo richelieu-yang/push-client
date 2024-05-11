@@ -4,12 +4,8 @@ import {ref, watch} from 'vue';
 import {LocalStorageUtil} from "@/_internal/utils/LocalStorageUtil";
 import type {TransportEndpoint, TransportName} from "centrifuge";
 import {CentrifugeClient} from "@/_internal/centrifuge/CentrifugeClient";
-import {CentrifugeKit} from "@/_chimera/longConnection/CentrifugeKit";
-import {UuidKit} from "@/_chimera/id/UuidKit";
 import {Console} from "@/_internal/utils/Console";
 
-let protocol = ref(LocalStorageUtil.getCentrifugeProtocol()),
-    secret = ref(LocalStorageUtil.getCentrifugeSecret());
 let alternative0Type = ref(LocalStorageUtil.getCentrifugeAlternative0Type()),
     alternative0Url = ref(LocalStorageUtil.getCentrifugeAlternative0Url()),
     alternative1Type = ref(LocalStorageUtil.getCentrifugeAlternative1Type()),
@@ -17,12 +13,6 @@ let alternative0Type = ref(LocalStorageUtil.getCentrifugeAlternative0Type()),
     alternative2Type = ref(LocalStorageUtil.getCentrifugeAlternative2Type()),
     alternative2Url = ref(LocalStorageUtil.getCentrifugeAlternative2Url());
 
-watch(protocol, (newVal, oldVal) => {
-  CentrifugeClient.disconnect(false);
-  Console.clear();
-
-  LocalStorageUtil.setCentrifugeProtocol(newVal);
-});
 watch(alternative0Type, (newVal, oldVal) => {
   CentrifugeClient.disconnect(false);
   Console.clear();
@@ -38,12 +28,27 @@ watch(alternative1Type, (newVal, oldVal) => {
 watch(alternative2Type, (newVal, oldVal) => {
   CentrifugeClient.disconnect(false);
   Console.clear();
-  
+
   LocalStorageUtil.setCentrifugeAlternative2Type(newVal);
 });
 
+function protocolChange() {
+  CentrifugeClient.disconnect(false);
+  Console.clear();
+
+  LocalStorageUtil.setCentrifugeProtocol(CentrifugeClient.protocol);
+}
+
 function secretBlur() {
-  LocalStorageUtil.setCentrifugeSecret(secret.value);
+  LocalStorageUtil.setCentrifugeSecret(CentrifugeClient.secret);
+}
+
+function userBlur() {
+  LocalStorageUtil.setCentrifugeUser(CentrifugeClient.user);
+}
+
+function channelBlur() {
+  LocalStorageUtil.setCentrifugeChannel(CentrifugeClient.channel);
 }
 
 function alternative0UrlBlur() {
@@ -94,15 +99,8 @@ async function connect(event: Event) {
       endpoint: alternative2Url.value
     });
   }
-  if (_.isEmpty(endpoints)) {
-    alert(`You need at least one valid TransportEndpoint!`);
-    return;
-  }
 
-  let user = UuidKit.v4();
-  let token = await CentrifugeKit.genToken({}, "HS256", secret.value, "24h", user);
-  let subToken = await CentrifugeKit.genSubToken({}, "HS256", secret.value, "24h", user, CentrifugeClient.defChannel);
-  CentrifugeClient.connect(protocol.value, endpoints, user, token, subToken);
+  await CentrifugeClient.connect(endpoints);
 }
 
 function disconnect(event: Event) {
@@ -119,16 +117,25 @@ function sendRpc(event: Event) {
 <template>
   <div>
     protocol:
-    <select v-model="protocol" class="margin-left">
+    <select v-model="CentrifugeClient.protocol" class="margin-left" @change="protocolChange">
       <option value="json">JSON</option>
       <option value="protobuf">Protobuf binary</option>
     </select>
     <br>
-    client credentials:
-    <select class="margin-left" disabled>
-      <option value="secret">token_hmac_secret_key</option>
-    </select>
-    <input v-model="secret" class="margin-left" style="width: 600px" type="text" @blur="secretBlur">
+
+    token_hmac_secret_key:
+    <input v-model="CentrifugeClient.secret" class="margin-left" placeholder="mustn't be empty" style="width: 600px" type="text"
+           @blur="secretBlur">
+    <br>
+
+    user:
+    <input v-model="CentrifugeClient.user" class="margin-left" placeholder="use UUIDv4 if empty" style="width: 600px" type="text"
+           @blur="userBlur">
+    <br>
+
+    channel:
+    <input v-model="CentrifugeClient.channel" class="margin-left" placeholder="mustn't be empty" style="width: 600px" type="text"
+           @blur="channelBlur">
   </div>
   <br>
 

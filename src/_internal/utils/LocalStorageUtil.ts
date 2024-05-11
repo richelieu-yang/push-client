@@ -96,6 +96,34 @@ export class LocalStorageUtil {
     }
 
     /*
+     * Centrifuge-User
+     */
+    static getCentrifugeUser(): string {
+        return LocalStorageKit.get("Centrifuge-User") || "";
+    }
+
+    /*
+     * Centrifuge-User
+     */
+    static setCentrifugeUser(value: string) {
+        LocalStorageKit.set("Centrifuge-User", value);
+    }
+
+    /*
+     * Centrifuge-Channel
+     */
+    static getCentrifugeChannel(): string {
+        return LocalStorageKit.get("Centrifuge-Channel") || "";
+    }
+
+    /*
+     * Centrifuge-Channel
+     */
+    static setCentrifugeChannel(value: string) {
+        LocalStorageKit.set("Centrifuge-Channel", value);
+    }
+
+    /*
      * Centrifuge-Alternative0-Type
      */
     static getCentrifugeAlternative0Type(): string {
