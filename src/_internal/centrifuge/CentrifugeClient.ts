@@ -39,7 +39,6 @@ export class CentrifugeClient {
             user = UuidKit.v4();
         }
 
-
         let token = await CentrifugeKit.genToken({}, "HS256", this.secret, "24h", user);
         let subToken = await CentrifugeKit.genSubToken({}, "HS256", this.secret, "24h", user, this.channel);
         Console.println(`user: [${user}]`);
@@ -49,10 +48,20 @@ export class CentrifugeClient {
         Console.println(`subToken: [${subToken}]`);
         Console.println("------------------------------------------------");
 
+        let emulationEndpoint: string = endpoints[0].endpoint;
+        let i = emulationEndpoint.indexOf("/connection");
+        if (i != -1) {
+            emulationEndpoint = emulationEndpoint.substring(0, i);
+            emulationEndpoint += "/emulation";
+        } else {
+            // Richelieu: 理论上不会走到此处
+            emulationEndpoint = "";
+        }
+
         let opts: Partial<Options> = {
             debug: true,
             token: token,
-            emulationEndpoint: "http://localhost:8000/emulation",
+            emulationEndpoint: emulationEndpoint,
             websocket: WebSocket
         };
 
