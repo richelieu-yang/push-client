@@ -64,6 +64,8 @@ function alternative2UrlBlur() {
 }
 
 async function connect(event: Event) {
+  Console.clear();
+
   let endpoints: TransportEndpoint[] = [];
 
   /* alternative 0 */
