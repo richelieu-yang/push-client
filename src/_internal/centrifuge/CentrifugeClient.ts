@@ -56,6 +56,8 @@ export class CentrifugeClient {
         } else {
             // Richelieu: 理论上不会走到此处
             emulationEndpoint = "";
+            alert("仿真endpoint有问题！");
+            return;
         }
 
         let opts: Partial<Options> = {
