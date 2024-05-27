@@ -110,8 +110,10 @@ function disconnect(event: Event) {
 }
 
 function sendRpc(event: Event) {
-  CentrifugeClient.rpc("my.method.name", {
-    "input": "hello"
+  CentrifugeClient.rpc("/ss.act", {
+    "fileId": "666",
+    "input": "hello",
+    "jsonParams": {},
   });
 }
 </script>
@@ -126,17 +128,20 @@ function sendRpc(event: Event) {
     <br>
 
     token_hmac_secret_key:
-    <input v-model="CentrifugeClient.secret" class="margin-left" placeholder="mustn't be empty" style="width: 600px" type="text"
+    <input v-model="CentrifugeClient.secret" class="margin-left" placeholder="mustn't be empty" style="width: 600px"
+           type="text"
            @blur="secretBlur">
     <br>
 
     user:
-    <input v-model="CentrifugeClient.user" class="margin-left" placeholder="use UUIDv4 if empty" style="width: 600px" type="text"
+    <input v-model="CentrifugeClient.user" class="margin-left" placeholder="use UUIDv4 if empty" style="width: 600px"
+           type="text"
            @blur="userBlur">
     <br>
 
     channel:
-    <input v-model="CentrifugeClient.channel" class="margin-left" placeholder="mustn't be empty" style="width: 600px" type="text"
+    <input v-model="CentrifugeClient.channel" class="margin-left" placeholder="mustn't be empty" style="width: 600px"
+           type="text"
            @blur="channelBlur">
   </div>
   <br>
