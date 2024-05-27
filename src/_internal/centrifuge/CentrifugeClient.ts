@@ -64,7 +64,13 @@ export class CentrifugeClient {
             debug: true,
             token: token,
             emulationEndpoint: emulationEndpoint,
-            websocket: WebSocket
+            websocket: WebSocket,
+            /*
+             * timeout for operations in milliseconds
+             * 默认: 约5s（自测）
+             * 单位: ms
+             */
+            timeout: 1000 * 10,
         };
 
         if (this.isProtobuf()) {
@@ -163,6 +169,8 @@ export class CentrifugeClient {
             return;
         }
 
+        Console.println(`[rpc] method: ${method}, data: ${JSON.stringify(data)}`);
+
         let rpcData: any;
         if (this.isProtobuf()) {
             // Make sure data is properly encoded when calling methods of Centrifuge Protobuf-based instance.
@@ -173,9 +181,8 @@ export class CentrifugeClient {
         }
         this.client.rpc(method, rpcData).then(function (rpcResult) {
             let data = rpcResult.data;
-            console.log('rpc result data:', data);
-
             let response: any;
+
             if (data instanceof Uint8Array) {
                 // protocol: Protobuf binary
                 let json = Uint8ArrayKit.toString(data);
@@ -184,9 +191,11 @@ export class CentrifugeClient {
                 // protocol: JSON
                 response = data;
             }
-            Console.println(`rpc response: ${JSON.stringify(response)}`);
+            console.log('[rpc] result data:', data);
+            Console.println(`[rpc] response: ${JSON.stringify(response)}`);
         }, function (err) {
-            console.log('rpc error:', err);
+            console.log('[rpc] error:', err);
+            Console.println(`[rpc] error: ${JSON.stringify(err)}`)
         });
     }
 
