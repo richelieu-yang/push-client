@@ -66,11 +66,15 @@ export class CentrifugeClient {
             emulationEndpoint: emulationEndpoint,
             websocket: WebSocket,
             /*
+             * 客户端的timeout
              * timeout for operations in milliseconds
              * 默认: 约5s（自测）
              * 单位: ms
+             *
+             * !!!:
+             * (1) 和 centrifugo 的 proxy_rpc_timeout 配置项搭配使用时，2个值应该相等!
              */
-            timeout: 1000 * 10,
+            timeout: 1000 * 11,
         };
 
         if (this.isProtobuf()) {
