@@ -72,9 +72,11 @@ export class CentrifugeClient {
              * 单位: ms
              *
              * !!!:
-             * (1) 和 centrifugo 的 proxy_rpc_timeout 配置项搭配使用时，2个值应该相等!
+             * (1) Richelieu: 建议采纳 timeout == centrifugo
+             * (2) 如果 timeout <= centrifugo 的 proxy_rpc_timeout 配置项，前端的超时报错: {"code":1,"message":"timeout"}
+             * (3) 如果 timeout > centrifugo 的 proxy_rpc_timeout 配置项，前端的超时报错: {"code":100,"message":"internal server error","temporary":true}
              */
-            timeout: 1000 * 11,
+            timeout: 1000 * 10,
         };
 
         if (this.isProtobuf()) {
