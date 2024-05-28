@@ -48,23 +48,14 @@ export class CentrifugeClient {
         Console.println(`subToken: [${subToken}]`);
         Console.println("------------------------------------------------");
 
-        let emulationEndpoint: string = endpoints[0].endpoint;
-        let i = emulationEndpoint.indexOf("/connection");
-        if (i != -1) {
-            emulationEndpoint = emulationEndpoint.substring(0, i);
-            emulationEndpoint += "/emulation";
-        } else {
-            // Richelieu: 理论上不会走到此处
-            emulationEndpoint = "";
-            alert("仿真endpoint有问题！");
-            return;
-        }
+        let emulationEndpoint = this.getEmulationEndpoint(endpoints);
+        Console.println(`emulation endpoint: [${emulationEndpoint}].`);
 
         let opts: Partial<Options> = {
             debug: true,
             token: token,
             emulationEndpoint: emulationEndpoint,
-            websocket: WebSocket,
+            // websocket: WebSocket,
             /*
              * 客户端的timeout
              * timeout for operations in milliseconds
@@ -78,6 +69,7 @@ export class CentrifugeClient {
              */
             timeout: 1000 * 10,
         };
+
 
         if (this.isProtobuf()) {
             this.client = new ProtobufCentrifuge(endpoints, opts);
@@ -207,6 +199,32 @@ export class CentrifugeClient {
 
     private static isProtobuf(): boolean {
         return this.protocol === "protobuf"
+    }
+
+    /*
+     * @return 可能为""
+     */
+    private static getEmulationEndpoint(endpoints: Array<TransportEndpoint>): string {
+        for (let te of endpoints) {
+            switch (te.transport) {
+                case "http_stream":
+                case "sse":
+                    let tmp = te.endpoint,
+                        i = tmp.indexOf("/connection");
+                    if (i != -1) {
+                        tmp = tmp.substring(0, i);
+                        tmp += "/emulation";
+                    } else {
+                        // Richelieu: 理论上不会走到此处，走到此处就有问题了!!!
+                        tmp = "";
+                        console.error("emulation endpoint is empty!!!")
+                    }
+                    return tmp;
+                default:
+                // do nothing
+            }
+        }
+        return "";
     }
 
 }
