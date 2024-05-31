@@ -17,6 +17,8 @@ function clear(event: Event) {
 
 let connectionType = ref(LocalStorageUtil.getConnectionType());
 watch(connectionType, (newVal, oldVal) => {
+  Console.clear();
+
   Console.println(`${Key.ConnectionType} is changed: ${oldVal} -> ${newVal}`);
   LocalStorageUtil.setConnectionType(newVal);
 });
@@ -34,7 +36,7 @@ watch(connectionType, (newVal, oldVal) => {
   <div>
     output:
     <br>
-    <textarea v-model="output" style="width: 1600px; height: 365px"></textarea>
+    <textarea v-model="output" style="width: 1600px; height: 400px"></textarea>
     <br>
     <button @click="clear($event)">Clear</button>
   </div>

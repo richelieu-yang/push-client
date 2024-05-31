@@ -158,7 +158,6 @@ function sendRpc(event: Event) {
            type="text"
            @blur="channelBlur">
   </div>
-  <br>
 
   <div>
     TransportEndpoints(default endpoint of Bidirectional WebSocket: ws://localhost:8000/connection/websocket):
@@ -194,8 +193,6 @@ function sendRpc(event: Event) {
       <input v-model="alternative2Url" class="margin-left" style="width: 600px" type="text" @blur="alternative2UrlBlur">
     </div>
   </div>
-  <br>
-
   <div>
     <button @click="connect($event)">Connect</button>
     <button class="margin-left" @click="disconnect($event)">Disconnect</button>
@@ -203,14 +200,12 @@ function sendRpc(event: Event) {
   <br>
 
   <div>
-    <!--    method:-->
-    <!--    <br>-->
-    <!--    <input style="width: 600px" type="text">-->
-    <!--    <br>-->
-    <!--    data:-->
-    <!--    <br>-->
-    <!--    <input style="width: 600px" type="text">-->
-    <!--    <br>-->
+    method:
+    <input class="margin-left" style="width: 600px" type="text">
+    <br>
+    data(json string):
+    <input class="margin-left" style="width: 600px" type="text">
+    <br>
     <button @click="sendRpc($event)">send rpc</button>
   </div>
   <br>
