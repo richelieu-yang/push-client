@@ -43,7 +43,7 @@ watch(connectionType, (newVal, oldVal) => {
   <div>
     output:
     <br>
-    <textarea v-model="output" style="width: 1600px; height: 400px"></textarea>
+    <textarea v-model="output" style="width: 1600px; height: 380px"></textarea>
     <br>
     <button @click="clear($event)">Clear</button>
   </div>
