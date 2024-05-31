@@ -39,12 +39,12 @@ export class CentrifugeClient {
             user = UuidKit.v4();
         }
 
-        let token = await CentrifugeKit.genToken({}, "HS256", this.secret, "24h", user);
+        let connectToken = await CentrifugeKit.genToken({}, "HS256", this.secret, "24h", user);
         let subToken = await CentrifugeKit.genSubToken({}, "HS256", this.secret, "24h", user, this.channel);
         Console.println(`user: [${user}]`);
         Console.println(`channel: [${this.channel}]`);
         Console.println(`secret: [${this.secret}]`);
-        Console.println(`token: [${token}]`);
+        Console.println(`token: [${connectToken}]`);
         Console.println(`subToken: [${subToken}]`);
         Console.println("------------------------------------------------");
 
@@ -53,7 +53,8 @@ export class CentrifugeClient {
 
         let opts: Partial<Options> = {
             debug: true,
-            token: token,
+            token: connectToken,
+            data: null,
             emulationEndpoint: emulationEndpoint,
             // websocket: WebSocket,
             /*
@@ -67,7 +68,7 @@ export class CentrifugeClient {
              * (2) 如果 timeout <= centrifugo 的 proxy_rpc_timeout 配置项，前端的超时报错: {"code":1,"message":"timeout"}
              * (3) 如果 timeout > centrifugo 的 proxy_rpc_timeout 配置项，前端的超时报错: {"code":100,"message":"internal server error","temporary":true}
              */
-            timeout: 1000 * 10,
+            timeout: 1000 * 30,
         };
 
 
@@ -78,56 +79,55 @@ export class CentrifugeClient {
         }
         // this.client.setToken("<token>");
         this.client.on('connecting', function (ctx) {
-            Console.println(`connecting: ${ctx.code}, ${ctx.reason}`);
+            Console.println(`[client-connecting] code: ${ctx.code}, reason: ${ctx.reason}`);
         });
         this.client.on('connected', function (ctx) {
-            Console.println(`connected over ${ctx.transport}`);
+            Console.println(`[client-connected] transport: ${ctx.transport}`);
         });
         this.client.on('disconnected', function (ctx) {
-            Console.println(`disconnected: ${ctx.code}, ${ctx.reason}`);
+            Console.println(`[client-disconnected] code: ${ctx.code}, reason: ${ctx.reason}`);
         });
         this.client.on('error', function (ctx) {
-            Console.println(`error: type(${ctx.type})、transport(${ctx.transport})、error.code(${ctx.error.code})、error.message(${ctx.error.message})`);
+            Console.println(`[client-error] type: ${ctx.type}, transport: ${ctx.transport}, error.code: ${ctx.error.code}, error.message: ${ctx.error.message}`);
         });
 
         let sub = this.client.newSubscription(this.channel, {
             token: subToken,
         });
+        sub.on("subscribing", function (ctx) {
+            Console.println(`[sub-subscribing] code: ${ctx.code}, reason: ${ctx.reason}`);
+        });
+        sub.on("subscribed", function (ctx) {
+            Console.println(`[sub-subscribed]`);
+        });
+        sub.on("unsubscribed", function (ctx) {
+            Console.println(`[sub-unsubscribed] code: ${ctx.code}, reason: ${ctx.reason}`);
+        });
+        sub.on("error", function (ctx) {
+            Console.println(`[sub-error] `);
+        });
         sub.on("publication", function (ctx) {
             console.log(ctx.data);
 
             if (typeof ctx.data === "string") {
-                Console.println(`publication: ${ctx.data}`);
+                Console.println(`[sub-publication] content(string): ${ctx.data}`);
                 return
             } else if (ctx.data instanceof Uint8Array) {
                 let text = Uint8ArrayKit.toString(ctx.data);
-                Console.println(`publication: ${text}`);
+                Console.println(`[sub-publication] content(Uint8Array): ${text}`);
                 return
             }
-
-            Console.println(`publication: ${JSON.stringify(ctx.data)}`);
+            Console.println(`[sub-publication] content(object): ${JSON.stringify(ctx.data)}`);
         });
         sub.on("join", function (ctx) {
-            Console.println(`User(user: ${ctx.info.user}, client: ${ctx.info.client}) joins.`);
+            Console.println(`[sub-join] info.user: ${ctx.info.user}, info.client: ${ctx.info.client}`);
         });
         sub.on("leave", function (ctx) {
-            Console.println(`User(user: ${ctx.info.user}, client: ${ctx.info.client}) leaves.`);
-        });
-        sub.on("error", function (ctx) {
-            Console.println(`error`);
-        });
-        sub.on("subscribing", function (ctx) {
-            Console.println(`subscribing: ${ctx.code}, ${ctx.reason}`);
-        });
-        sub.on("subscribed", function (ctx) {
-            Console.println(`subscribed`);
-        });
-        sub.on("unsubscribed", function (ctx) {
-            Console.println(`unsubscribed: ${ctx.code}, ${ctx.reason}`);
+            Console.println(`[sub-leave] info.user: ${ctx.info.user}, info.client: ${ctx.info.client}`);
         });
 
-        sub.subscribe();
         this.client.connect();
+        sub.subscribe();
     }
 
     static publish(data: any) {
