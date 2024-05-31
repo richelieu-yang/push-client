@@ -61,10 +61,8 @@ export class CentrifugeClient {
         Console.println(`secret: [${this.secret}]`);
         Console.println(`token: [${connectToken}]`);
         Console.println(`subToken: [${subToken}]`);
-        Console.println("------------------------------------------------");
-
         let emulationEndpoint = this.getEmulationEndpoint(endpoints);
-        Console.println(`emulation endpoint: [${emulationEndpoint}].`);
+        Console.println(`emulation endpoint: "${emulationEndpoint}"`);
 
         let opts: Partial<Options> = {
             debug: this.debug,
@@ -99,15 +97,15 @@ export class CentrifugeClient {
         });
         this.client.on('connected', function (ctx: ConnectedContext) {
             console.log("ConnectedContext", ctx);
-            Console.println(`[client-connected] client: ${ctx.client}, transport: ${ctx.transport}`);
+            Console.println(`+++ [client-connected] client: ${ctx.client}, transport: ${ctx.transport}`);
         });
         this.client.on('disconnected', function (ctx: DisconnectedContext) {
             console.log("DisconnectedContext", ctx);
-            Console.println(`[client-disconnected] code: ${ctx.code}, reason: ${ctx.reason}`);
+            Console.println(`--- [client-disconnected] code: ${ctx.code}, reason: ${ctx.reason}`);
         });
         this.client.on('error', function (ctx: ErrorContext) {
             console.log("ErrorContext", ctx);
-            Console.println(`[client-error] type: ${ctx.type}, transport: ${ctx.transport}, error.code: ${ctx.error.code}, error.message: ${ctx.error.message}`);
+            Console.println(`--- [client-error] type: ${ctx.type}, transport: ${ctx.transport}, error.code: ${ctx.error.code}, error.message: ${ctx.error.message}`);
         });
 
         let sub = this.client.newSubscription(this.channel, {
@@ -121,17 +119,17 @@ export class CentrifugeClient {
         sub.on("subscribed", function (ctx: SubscribedContext) {
             console.log("SubscribedContext", ctx);
 
-            Console.println(`[sub-subscribed] channel: ${ctx.channel}`);
+            Console.println(`+++ [sub-subscribed] channel: ${ctx.channel}`);
         });
         sub.on("unsubscribed", function (ctx: UnsubscribedContext) {
             console.log("UnsubscribedContext", ctx);
 
-            Console.println(`[sub-unsubscribed] channel: ${ctx.channel}, code: ${ctx.code}, reason: ${ctx.reason}`);
+            Console.println(`--- [sub-unsubscribed] channel: ${ctx.channel}, code: ${ctx.code}, reason: ${ctx.reason}`);
         });
         sub.on("error", function (ctx: SubscriptionErrorContext) {
             console.log("SubscriptionErrorContext", ctx);
 
-            Console.println(`[sub-error] channel: ${ctx.channel}, type: ${ctx.type}, error.code: ${ctx.error.code}, error.message: ${ctx.error.message}`);
+            Console.println(`--- [sub-error] channel: ${ctx.channel}, type: ${ctx.type}, error.code: ${ctx.error.code}, error.message: ${ctx.error.message}`);
         });
         sub.on("publication", function (ctx: PublicationContext) {
             console.log("PublicationContext", ctx);
