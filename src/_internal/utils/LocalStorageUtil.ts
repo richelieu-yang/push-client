@@ -68,6 +68,20 @@ export class LocalStorageUtil {
     }
 
     /*
+     * Centrifuge-Debug
+     */
+    static getCentrifugeDebug(): boolean {
+        return LocalStorageKit.get("Centrifuge-Debug") === "true";
+    }
+
+    /*
+     * Centrifuge-Debug
+     */
+    static setCentrifugeDebug(flag: boolean) {
+        LocalStorageKit.set("Centrifuge-Debug", "" + flag);
+    }
+
+    /*
      * Centrifuge-Protocol
      */
     static getCentrifugeProtocol(): string {

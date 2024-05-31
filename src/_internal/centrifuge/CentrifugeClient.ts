@@ -14,6 +14,7 @@ import {CentrifugeKit} from "@/_chimera/longConnection/CentrifugeKit";
 export class CentrifugeClient {
     private static client: Centrifuge | ProtobufCentrifuge | null = null;
 
+    static debug: boolean = LocalStorageUtil.getCentrifugeDebug();
     static protocol: string = LocalStorageUtil.getCentrifugeProtocol();
     static user: string = LocalStorageUtil.getCentrifugeUser();
     static channel: string = LocalStorageUtil.getCentrifugeChannel();
@@ -52,7 +53,7 @@ export class CentrifugeClient {
         Console.println(`emulation endpoint: [${emulationEndpoint}].`);
 
         let opts: Partial<Options> = {
-            debug: true,
+            debug: this.debug,
             token: connectToken,
             data: null,
             emulationEndpoint: emulationEndpoint,
@@ -79,10 +80,12 @@ export class CentrifugeClient {
         }
         // this.client.setToken("<token>");
         this.client.on('connecting', function (ctx) {
+            console.log(ctx);
             Console.println(`[client-connecting] code: ${ctx.code}, reason: ${ctx.reason}`);
         });
         this.client.on('connected', function (ctx) {
-            Console.println(`[client-connected] transport: ${ctx.transport}`);
+            console.log(ctx);
+            Console.println(`[client-connected] client: ${ctx.client}, transport: ${ctx.transport}`);
         });
         this.client.on('disconnected', function (ctx) {
             Console.println(`[client-disconnected] code: ${ctx.code}, reason: ${ctx.reason}`);

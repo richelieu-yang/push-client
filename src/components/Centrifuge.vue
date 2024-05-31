@@ -32,6 +32,13 @@ watch(alternative2Type, (newVal, oldVal) => {
   LocalStorageUtil.setCentrifugeAlternative2Type(newVal);
 });
 
+function debugChange() {
+  CentrifugeClient.disconnect(false);
+  Console.clear();
+
+  LocalStorageUtil.setCentrifugeDebug(CentrifugeClient.debug);
+}
+
 function protocolChange() {
   CentrifugeClient.disconnect(false);
   Console.clear();
@@ -120,6 +127,13 @@ function sendRpc(event: Event) {
 
 <template>
   <div>
+    debug:
+    <select v-model="CentrifugeClient.debug" class="margin-left" @change="debugChange">
+      <option value="false">false</option>
+      <option value="true">true</option>
+    </select>
+    <br>
+
     protocol:
     <select v-model="CentrifugeClient.protocol" class="margin-left" @change="protocolChange">
       <option value="json">JSON</option>
