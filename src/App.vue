@@ -6,6 +6,9 @@ import {LocalStorageUtil} from "@/_internal/utils/LocalStorageUtil";
 import SSE from "@/components/SSE.vue";
 import Centrifuge from "@/components/Centrifuge.vue";
 import {Key} from "@/_internal/consts/key";
+import {CentrifugeClient} from "@/_internal/centrifuge/CentrifugeClient";
+import {WebSocketClient} from "@/_internal/ws/WebSocketClient";
+import {SseClient} from "@/_internal/sse/SseClient";
 
 /* Console */
 let output = ref("");
@@ -17,6 +20,10 @@ function clear(event: Event) {
 
 let connectionType = ref(LocalStorageUtil.getConnectionType());
 watch(connectionType, (newVal, oldVal) => {
+  CentrifugeClient.disconnect(false);
+  WebSocketClient.disconnect();
+  SseClient.disconnect();
+
   Console.clear();
 
   Console.println(`${Key.ConnectionType} is changed: ${oldVal} -> ${newVal}`);
