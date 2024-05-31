@@ -33,6 +33,8 @@ export class CentrifugeClient {
     static user: string = LocalStorageUtil.getCentrifugeUser();
     static channel: string = LocalStorageUtil.getCentrifugeChannel();
     static secret: string = LocalStorageUtil.getCentrifugeSecret();
+    static rpcMethod: string = LocalStorageUtil.getCentrifugeRpcMethod();
+    static rpcData: string = LocalStorageUtil.getCentrifugeRpcData();
 
     static async connect(endpoints: Array<TransportEndpoint>) {
         this.disconnect(false);
@@ -190,23 +192,41 @@ export class CentrifugeClient {
         return WebSocketKit.checkUrl(url) || SseKit.checkUrl(url);
     }
 
-    static rpc(method: string, data: any) {
+    static rpc() {
         if (this.client == null) {
             alert("No connection now!");
             return;
         }
 
+        let method: string = this.rpcMethod,
+            data: any;
+
+        /* 取值 */
+        if (_.isEmpty(this.rpcMethod)) {
+            alert("rpc method is empty!");
+            return;
+        }
+        if (_.isEmpty(this.rpcData)) {
+            alert("rpc data is empty!");
+            return;
+        }
+        try {
+            data = JSON.parse(this.rpcData)
+        } catch (e) {
+            alert("rpc data is a json string!");
+            return;
+        }
         Console.println(`[rpc] method: ${method}, data: ${JSON.stringify(data)}`);
 
-        let rpcData: any;
+        let finalData: any;
         if (this.isProtobuf()) {
             // Make sure data is properly encoded when calling methods of Centrifuge Protobuf-based instance.
             // 使用 protobuf 协议，需要额外编码为Uint8Array实例
-            rpcData = StringKit.toUint8Array(JSON.stringify(data));
+            finalData = StringKit.toUint8Array(JSON.stringify(data));
         } else {
-            rpcData = data;
+            finalData = data;
         }
-        this.client.rpc(method, rpcData).then(function (rpcResult) {
+        this.client.rpc(method, finalData).then(function (rpcResult) {
             let data = rpcResult.data;
             let response: any;
 

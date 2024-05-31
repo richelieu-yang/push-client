@@ -46,6 +46,14 @@ function protocolChange() {
   LocalStorageUtil.setCentrifugeProtocol(CentrifugeClient.protocol);
 }
 
+function rpcMethodChanged() {
+  LocalStorageUtil.setCentrifugeRpcMethod(CentrifugeClient.rpcMethod);
+}
+
+function rpcDataChanged() {
+  LocalStorageUtil.setCentrifugeRpcData(CentrifugeClient.rpcData);
+}
+
 function secretBlur() {
   LocalStorageUtil.setCentrifugeSecret(CentrifugeClient.secret);
 }
@@ -116,12 +124,8 @@ function disconnect(event: Event) {
   CentrifugeClient.disconnect();
 }
 
-function sendRpc(event: Event) {
-  CentrifugeClient.rpc("/ss.act", {
-    "fileId": "666",
-    "input": "hello",
-    "jsonParams": {},
-  });
+function sendRPC(event: Event) {
+  CentrifugeClient.rpc();
 }
 </script>
 
@@ -200,13 +204,15 @@ function sendRpc(event: Event) {
   <br>
 
   <div>
-    method:
-    <input class="margin-left" style="width: 600px" type="text">
+    rpc method:
+    <input v-model="CentrifugeClient.rpcMethod" class="margin-left" style="width: 600px" type="text"
+           @change="rpcMethodChanged">
     <br>
-    data(json string):
-    <input class="margin-left" style="width: 600px" type="text">
+    rpc data(json string):
+    <input v-model="CentrifugeClient.rpcData" class="margin-left" style="width: 600px" type="text"
+           @change="rpcDataChanged">
     <br>
-    <button @click="sendRpc($event)">send rpc</button>
+    <button @click="sendRPC($event)">Send RPC</button>
   </div>
   <br>
 </template>

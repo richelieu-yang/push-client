@@ -221,4 +221,32 @@ export class LocalStorageUtil {
         LocalStorageKit.set("Centrifuge-Alternative2-Url", value);
     }
 
+    /*
+     * Centrifuge-Rpc-Method
+     */
+    static getCentrifugeRpcMethod(): string {
+        return LocalStorageKit.get("Centrifuge-Rpc-Method") || "";
+    }
+
+    /*
+     * Centrifuge-Rpc-Method
+     */
+    static setCentrifugeRpcMethod(value: string) {
+        LocalStorageKit.set("Centrifuge-Rpc-Method", value);
+    }
+
+    /*
+     * Centrifuge-Rpc-Data
+     */
+    static getCentrifugeRpcData(): string {
+        return LocalStorageKit.get("Centrifuge-Rpc-Data") || "";
+    }
+
+    /*
+     * Centrifuge-Rpc-Data
+     */
+    static setCentrifugeRpcData(value: string) {
+        LocalStorageKit.set("Centrifuge-Rpc-Data", value);
+    }
+
 }
