@@ -1,5 +1,19 @@
 import _ from "lodash";
-import type {Options, TransportEndpoint} from "centrifuge";
+import type {
+    ConnectedContext,
+    ConnectingContext,
+    DisconnectedContext,
+    ErrorContext,
+    JoinContext,
+    LeaveContext,
+    Options,
+    PublicationContext,
+    SubscribedContext,
+    SubscribingContext,
+    SubscriptionErrorContext,
+    TransportEndpoint,
+    UnsubscribedContext
+} from "centrifuge";
 import {Centrifuge} from 'centrifuge';
 import {Centrifuge as ProtobufCentrifuge} from 'centrifuge/build/protobuf';
 import {Console} from "@/_internal/utils/Console";
@@ -79,54 +93,68 @@ export class CentrifugeClient {
             this.client = new Centrifuge(endpoints, opts);
         }
         // this.client.setToken("<token>");
-        this.client.on('connecting', function (ctx) {
-            console.log(ctx);
+        this.client.on('connecting', function (ctx: ConnectingContext) {
+            console.log("ConnectingContext", ctx);
             Console.println(`[client-connecting] code: ${ctx.code}, reason: ${ctx.reason}`);
         });
-        this.client.on('connected', function (ctx) {
-            console.log(ctx);
+        this.client.on('connected', function (ctx: ConnectedContext) {
+            console.log("ConnectedContext", ctx);
             Console.println(`[client-connected] client: ${ctx.client}, transport: ${ctx.transport}`);
         });
-        this.client.on('disconnected', function (ctx) {
+        this.client.on('disconnected', function (ctx: DisconnectedContext) {
+            console.log("DisconnectedContext", ctx);
             Console.println(`[client-disconnected] code: ${ctx.code}, reason: ${ctx.reason}`);
         });
-        this.client.on('error', function (ctx) {
+        this.client.on('error', function (ctx: ErrorContext) {
+            console.log("ErrorContext", ctx);
             Console.println(`[client-error] type: ${ctx.type}, transport: ${ctx.transport}, error.code: ${ctx.error.code}, error.message: ${ctx.error.message}`);
         });
 
         let sub = this.client.newSubscription(this.channel, {
             token: subToken,
         });
-        sub.on("subscribing", function (ctx) {
+        sub.on("subscribing", function (ctx: SubscribingContext) {
+            console.log("SubscribingContext", ctx);
+
             Console.println(`[sub-subscribing] code: ${ctx.code}, reason: ${ctx.reason}`);
         });
-        sub.on("subscribed", function (ctx) {
-            Console.println(`[sub-subscribed]`);
+        sub.on("subscribed", function (ctx: SubscribedContext) {
+            console.log("SubscribedContext", ctx);
+
+            Console.println(`[sub-subscribed] channel: ${ctx.channel}`);
         });
-        sub.on("unsubscribed", function (ctx) {
-            Console.println(`[sub-unsubscribed] code: ${ctx.code}, reason: ${ctx.reason}`);
+        sub.on("unsubscribed", function (ctx: UnsubscribedContext) {
+            console.log("UnsubscribedContext", ctx);
+
+            Console.println(`[sub-unsubscribed] channel: ${ctx.channel}, code: ${ctx.code}, reason: ${ctx.reason}`);
         });
-        sub.on("error", function (ctx) {
-            Console.println(`[sub-error] `);
+        sub.on("error", function (ctx: SubscriptionErrorContext) {
+            console.log("SubscriptionErrorContext", ctx);
+
+            Console.println(`[sub-error] channel: ${ctx.channel}, type: ${ctx.type}, error.code: ${ctx.error.code}, error.message: ${ctx.error.message}`);
         });
-        sub.on("publication", function (ctx) {
-            console.log(ctx.data);
+        sub.on("publication", function (ctx: PublicationContext) {
+            console.log("PublicationContext", ctx);
 
             if (typeof ctx.data === "string") {
-                Console.println(`[sub-publication] content(string): ${ctx.data}`);
+                Console.println(`[sub-publication] channel: ${ctx.channel}, content(string): ${ctx.data}`);
                 return
             } else if (ctx.data instanceof Uint8Array) {
                 let text = Uint8ArrayKit.toString(ctx.data);
-                Console.println(`[sub-publication] content(Uint8Array): ${text}`);
+                Console.println(`[sub-publication] channel: ${ctx.channel}, content(Uint8Array): ${text}`);
                 return
             }
-            Console.println(`[sub-publication] content(object): ${JSON.stringify(ctx.data)}`);
+            Console.println(`[sub-publication] channel: ${ctx.channel}, content(object): ${JSON.stringify(ctx.data)}`);
         });
-        sub.on("join", function (ctx) {
-            Console.println(`[sub-join] info.user: ${ctx.info.user}, info.client: ${ctx.info.client}`);
+        sub.on("join", function (ctx: JoinContext) {
+            console.log("JoinContext", ctx);
+
+            Console.println(`[sub-join] channel: ${ctx.channel}, info.user: ${ctx.info.user}, info.client: ${ctx.info.client}`);
         });
-        sub.on("leave", function (ctx) {
-            Console.println(`[sub-leave] info.user: ${ctx.info.user}, info.client: ${ctx.info.client}`);
+        sub.on("leave", function (ctx: LeaveContext) {
+            console.log("LeaveContext", ctx);
+
+            Console.println(`[sub-leave] channel: ${ctx.channel}, info.user: ${ctx.info.user}, info.client: ${ctx.info.client}`);
         });
 
         this.client.connect();
