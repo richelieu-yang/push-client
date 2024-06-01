@@ -233,10 +233,10 @@ export class CentrifugeClient {
         /* 获取返回值的方法1 */
         try {
             let rpcResult = await this.client.rpc(method, finalData);
+            console.log('[rpc] result:', rpcResult);
 
             let data = rpcResult.data;
             let response: any;
-
             if (data instanceof Uint8Array) {
                 // protocol: Protobuf binary
                 let json = Uint8ArrayKit.toString(data);
@@ -245,7 +245,6 @@ export class CentrifugeClient {
                 // protocol: JSON
                 response = data;
             }
-            console.log('[rpc] result data:', data);
             Console.println(`[rpc] response: ${JSON.stringify(response)}`);
         } catch (err) {
             console.log('[rpc] error:', err);
