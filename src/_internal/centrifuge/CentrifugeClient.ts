@@ -195,7 +195,7 @@ export class CentrifugeClient {
         return WebSocketKit.checkUrl(url) || SseKit.checkUrl(url);
     }
 
-    static rpc() {
+    static async rpc() {
         if (this.client == null) {
             alert("No connection now!");
             return;
@@ -229,7 +229,11 @@ export class CentrifugeClient {
         } else {
             finalData = data;
         }
-        this.client.rpc(method, finalData).then(function (rpcResult) {
+
+        /* 获取返回值的方法1 */
+        try {
+            let rpcResult = await this.client.rpc(method, finalData);
+
             let data = rpcResult.data;
             let response: any;
 
@@ -243,10 +247,30 @@ export class CentrifugeClient {
             }
             console.log('[rpc] result data:', data);
             Console.println(`[rpc] response: ${JSON.stringify(response)}`);
-        }, function (err) {
+        } catch (err) {
             console.log('[rpc] error:', err);
             Console.println(`[rpc] error: ${JSON.stringify(err)}`)
-        });
+        }
+
+        /* 获取返回值的方法2 */
+        // this.client.rpc(method, finalData).then(function (rpcResult) {
+        //     let data = rpcResult.data;
+        //     let response: any;
+        //
+        //     if (data instanceof Uint8Array) {
+        //         // protocol: Protobuf binary
+        //         let json = Uint8ArrayKit.toString(data);
+        //         response = JSON.parse(json);
+        //     } else {
+        //         // protocol: JSON
+        //         response = data;
+        //     }
+        //     console.log('[rpc] result data:', data);
+        //     Console.println(`[rpc] response: ${JSON.stringify(response)}`);
+        // }, function (err) {
+        //     console.log('[rpc] error:', err);
+        //     Console.println(`[rpc] error: ${JSON.stringify(err)}`)
+        // });
     }
 
     private static isProtobuf(): boolean {
