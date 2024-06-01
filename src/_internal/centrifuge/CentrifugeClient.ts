@@ -104,6 +104,9 @@ export class CentrifugeClient {
         this.client.on('disconnected', function (ctx: DisconnectedContext) {
             console.log("DisconnectedContext", ctx);
             Console.println(`--- [client-disconnected] code: ${ctx.code}, reason: ${ctx.reason}`);
+
+            // 长连接彻底结束
+            CentrifugeClient.client = null;
         });
         this.client.on('error', function (ctx: ErrorContext) {
             console.log("ErrorContext", ctx);
