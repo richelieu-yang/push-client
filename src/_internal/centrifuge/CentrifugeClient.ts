@@ -86,7 +86,6 @@ export class CentrifugeClient {
             timeout: 1000 * 30,
         };
 
-
         if (this.isProtobuf()) {
             this.client = new ProtobufCentrifuge(endpoints, opts);
         } else {
