@@ -2,7 +2,7 @@ export class TimeKit {
     /*
     * @return e.g.'2024-06-13 10:21:16.245'
     */
-    static getCurrentTimeString(): string {
+    static getCurrentTimeString() {
         let date = new Date();
         let year = date.getFullYear(),
             month = (date.getMonth() + 1).toString().padStart(2, '0'), // 月份从0开始
@@ -14,4 +14,5 @@ export class TimeKit {
 
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
     }
+
 }
