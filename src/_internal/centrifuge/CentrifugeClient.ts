@@ -12,7 +12,7 @@ import type {
     SubscribingContext,
     SubscriptionErrorContext,
     TransportEndpoint,
-    UnsubscribedContext
+    UnsubscribedContext,
 } from "centrifuge";
 import {Centrifuge} from 'centrifuge';
 import {Centrifuge as ProtobufCentrifuge} from 'centrifuge/build/protobuf';
@@ -299,6 +299,18 @@ export class CentrifugeClient {
             }
         }
         return "";
+    }
+
+    /*
+     * 返回长连接客户端的状态.
+     */
+    static getState(): string {
+        if (this.client == null) {
+            return "null";
+        }
+
+        // "connecting" || "connecting" || "connected"
+        return this.client.state;
     }
 
 }
